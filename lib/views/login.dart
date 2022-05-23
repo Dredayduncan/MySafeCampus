@@ -24,6 +24,7 @@ class _LoginState extends State<Login> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
+          reverse: true,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
