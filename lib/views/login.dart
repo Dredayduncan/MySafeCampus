@@ -40,7 +40,7 @@ class _LoginState extends State<Login> {
               const Padding(
                 padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
                 child: Text(
-                  "Let's log you in",
+                  "Let's log you in.",
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
