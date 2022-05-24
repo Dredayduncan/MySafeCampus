@@ -59,12 +59,30 @@ class _HomeScreenState extends State<HomeScreen> {
               color: kDarkTextColor,
             ),
           ),
-          ElevatedButton(
-            onPressed: () {},
-            child: Container(
-              decoration: BoxDecoration(),
+          const Spacer(),
+          Align(
+            alignment: Alignment.center,
+            child: SizedBox(
+              width: 150,
+              height: 150,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(kDefaultBackground),
+                  shadowColor: MaterialStateProperty.all(
+                      kDefaultBackground.withOpacity(1)),
+                  shape: MaterialStateProperty.all(const CircleBorder()),
+                  elevation: MaterialStateProperty.all(15),
+                ),
+                child: const Icon(
+                  Icons.report,
+                  size: 50,
+                ),
+              ),
             ),
-          )
+          ),
+          const Spacer(),
         ],
       ),
     );
