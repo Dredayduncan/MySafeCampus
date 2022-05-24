@@ -28,7 +28,10 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   firebase_auth: ^3.3.11
-  
+  firebase_core:
+  flutter_phone_direct_caller:
+  flutter_local_notifications:
+
   flutter:
     sdk: flutter
 

@@ -26,25 +26,25 @@ class Auth {
     }
   }
 
-  // Sign up with email and password
-  Future<User?>createUserWithEmailAndPassword({required String email, required password, required username, required contact}) async {
-    final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password
-    );
-
-    // try {
-    //   Database(authID: userCredential.user!.uid).userSignUp(
-    //     uid: userCredential.user?.uid,
-    //     username: username,
-    //     contact: contact
-    //   );
-    // } catch (e) {
-    //   return null;
-    // }
-
-    return userCredential.user;
-  }
+  // // Sign up with email and password
+  // Future<User?>createUserWithEmailAndPassword({required String email, required password, required username, required contact}) async {
+  //   final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+  //       email: email,
+  //       password: password
+  //   );
+  //
+  //   // try {
+  //   //   Database(authID: userCredential.user!.uid).userSignUp(
+  //   //     uid: userCredential.user?.uid,
+  //   //     username: username,
+  //   //     contact: contact
+  //   //   );
+  //   // } catch (e) {
+  //   //   return null;
+  //   // }
+  //
+  //   return userCredential.user;
+  // }
 
   //Log the user out of the application
   Future<void> signOut() async {
