@@ -79,9 +79,7 @@ class _LoginState extends State<Login> {
                           });
                         },
                         validator: (emailValue) {
-                          print(emailValue);
-                          print(emailReg.hasMatch(emailValue!.trim()));
-                          if (emailValue.isEmpty || !emailReg.hasMatch(emailValue)){
+                          if (emailValue!.isEmpty || !emailReg.hasMatch(emailValue)){
                             return "Please input the correct Ashesi email";
                           }
 
