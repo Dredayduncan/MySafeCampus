@@ -115,14 +115,13 @@ class _LoginState extends State<Login> {
                           const SizedBox(height: 20),
                           CustomButton(
                             onPressed: () {
-                              setState(() {
-                                _isLoading = true;
-                              });
                               if (!formKey.currentState!.validate()) {
                                 return;
                               } else {
                                 // set isLoading to true
-
+                                setState(() {
+                                  _isLoading = true;
+                                });
                                 auth
                                     .signInWithEmailAndPassword(
                                         _emailValue, _passValue)
@@ -160,7 +159,7 @@ class _LoginState extends State<Login> {
 
                                   return Navigator.of(context,
                                           rootNavigator: true)
-                                      .pushNamed('/home');
+                                      .pushReplacementNamed('/home');
                                 });
                               }
                             },
