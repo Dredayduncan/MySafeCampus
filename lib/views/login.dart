@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:my_safe_campus/constants.dart';
 import 'package:my_safe_campus/services/auth.dart';
 import 'package:my_safe_campus/views/homeScreen.dart';
+import 'package:my_safe_campus/views/loading_screen.dart';
 import 'package:my_safe_campus/widgets/custom_button.dart';
+import 'package:my_safe_campus/widgets/custom_textfield.dart';
 
 class Login extends StatefulWidget {
-
   const Login({Key? key}) : super(key: key);
 
   @override
@@ -24,187 +25,147 @@ class _LoginState extends State<Login> {
   // controller values
   String _emailValue = '';
   String _passValue = '';
-  
+
+  // boolean state to trigger loading screen
+  bool _isLoading = false;
+
   // Validation Regex
   final RegExp emailReg = RegExp(r'^[a-z]{2}[a-z]+(@ashesi.edu.gh)$');
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          reverse: true,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                // margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                width: double.infinity,
-                height: 350,
-                child: Image(
-                  image: AssetImage("assets/images/Mansplaining-bro.png"),
-                ),
-              ),
-              const SizedBox(height: 10),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
-                child: Text(
-                  "Let's log you in.",
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
+  Widget build(BuildContext context) => _isLoading
+      ? const LoadingScreen()
+      : Scaffold(
+          body: SafeArea(
+            child: SingleChildScrollView(
+              reverse: true,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    // margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                    width: double.infinity,
+                    height: 350,
+                    child: Image(
+                      image: AssetImage("assets/images/Mansplaining-bro.png"),
+                    ),
                   ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
-                child: Text(
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilisi tempor fringilla.",
-                  style: TextStyle(
-                    fontSize: 16,
+                  const SizedBox(height: 10),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
+                    child: Text(
+                      "Let's log you in.",
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        controller: _emailController,
-                        onChanged: (value) {
-                          setState(() {
-                            _emailValue = _emailController.text;
-                          });
-                        },
-                        validator: (emailValue) {
-                          if (emailValue!.isEmpty || !emailReg.hasMatch(emailValue)){
-                            return "Please input the correct Ashesi email";
-                          }
-
-                          return null;
-                        },
-                        style: const TextStyle(color: kDarkTextColor),
-                        decoration: InputDecoration(
-                          hintText: 'Email',
-                          hintStyle: const TextStyle(
-                            color: Colors.grey,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          prefixIcon: const Icon(
-                            Icons.email,
-                            color: Colors.grey,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.grey.withOpacity(0.3)),
-                          ),
-                          disabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.grey.withOpacity(0.3)),
-                          ),
-                          errorBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.grey.withOpacity(0.3),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        controller: _passController,
-                        onChanged: (value) {
-                          setState(() {
-                            _passValue = _passController.text;
-                          });
-                        },
-                        validator: (passValue) {
-                          if (passValue!.isEmpty){
-                            return "Please input the correct password";
-                          }
-
-                          return null;
-                        },
-                        style: const TextStyle(color: kDarkTextColor),
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          hintText: 'Password',
-                          hintStyle: const TextStyle(
-                            color: Colors.grey,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          prefixIcon: const Icon(
-                            Icons.lock,
-                            color: Colors.grey,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.grey.withOpacity(0.3)),
-                          ),
-                          disabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.grey.withOpacity(0.3)),
-                          ),
-                          errorBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.grey.withOpacity(0.3),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      CustomButton(
-                        onPressed: () {
-                          if (!formKey.currentState!.validate()){
-                            return;
-                          }
-                          else{
-                            auth.signInWithEmailAndPassword(
-                                _emailValue,
-                                _passValue
-                            ).
-                            then((value) async {
-                              if (value == null){
-                                return showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) => AlertDialog(
-                                    title: const Text('Error'),
-                                    content: const Text('Your username or password is incorrect'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context, 'OK'),
-                                        child: const Text('OK'),
-                                      ),
-                                    ],
-                                  ),
-                                );
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          CustomTextField(
+                            controller: _emailController,
+                            hintText: 'Email',
+                            icon: Icons.email,
+                            onChanged: (value) {
+                              setState(() {
+                                _emailValue = _emailController.text;
+                              });
+                            },
+                            validator: (emailValue) {
+                              if (emailValue!.isEmpty ||
+                                  !emailReg.hasMatch(emailValue)) {
+                                return "Please input the correct Ashesi email";
                               }
 
-                              return Navigator.push(
-                                  context, MaterialPageRoute(
-                                  builder: (context) => HomeScreen(auth: auth))
-                              );
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 10),
+                          CustomTextField(
+                            controller: _passController,
+                            hintText: 'Password',
+                            icon: Icons.lock,
+                            onChanged: (value) {
+                              setState(() {
+                                _passValue = _passController.text;
+                              });
+                            },
+                            validator: (passValue) {
+                              if (passValue!.isEmpty) {
+                                return "Please input the correct password";
+                              }
 
-                            });
-                          }
-                        },
-                        btnName: 'Sign In',
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          CustomButton(
+                            onPressed: () {
+
+                              // Check if the front end validation has passed
+                              if (!formKey.currentState!.validate()) {
+                                return;
+                              } else {
+                                // set isLoading to true
+                                setState(() {
+                                  _isLoading = true;
+                                });
+
+                                auth
+                                    .signInWithEmailAndPassword(
+                                        _emailValue, _passValue)
+                                    .then((value) async {
+                                  if (value == null) {
+                                    setState(() {
+                                      _isLoading = false;
+                                    });
+                                    return showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                        title: const Text('Error'),
+                                        content: const Text(
+                                            'Your username or password is incorrect'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context, 'OK'),
+                                            child: const Text('OK'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
+
+                                  await Future.delayed(
+                                    const Duration(seconds: 2),
+                                  );
+
+                                  // set isLoading to false
+                                  setState(() {
+                                    _isLoading = false;
+                                  });
+
+                                  return Navigator.of(context,
+                                          rootNavigator: true)
+                                      .pushNamed('/home');
+                                });
+                              }
+                            },
+                            btnName: 'Sign In',
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-              )
-            ],
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
-    );
-  }
+        );
 }
