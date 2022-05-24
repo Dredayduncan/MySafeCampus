@@ -32,7 +32,7 @@ class _LandingPageState extends State<LandingPage> {
           //Check if the user has signed in
           if (user == null) {
             //Display the signIn page if the user has not logged in
-            return Login(auth: auth,);
+            return const Login();
           }
 
           // Redirect the user to the main screen if they're logged in already

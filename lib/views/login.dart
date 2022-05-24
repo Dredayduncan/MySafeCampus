@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:my_safe_campus/constants.dart';
 import 'package:my_safe_campus/services/auth.dart';
+import 'package:my_safe_campus/views/homeScreen.dart';
 import 'package:my_safe_campus/widgets/custom_button.dart';
 
 class Login extends StatefulWidget {
-  final Auth? auth;
-  const Login({Key? key, this.auth}) : super(key: key);
+
+  const Login({Key? key}) : super(key: key);
 
   @override
   State<Login> createState() => _LoginState();
@@ -14,14 +15,15 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   // form key
   final formKey = GlobalKey<FormState>();
+  final Auth auth = Auth();
 
   // form field controllers
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
 
   // controller values
-  String emailValue = '';
-  String passValue = '';
+  String _emailValue = '';
+  String _passValue = '';
   
   // Validation Regex
   final RegExp emailReg = RegExp(r'^[a-z]{2}[a-z]+(@ashesi.edu.gh)$');
@@ -73,7 +75,7 @@ class _LoginState extends State<Login> {
                         controller: _emailController,
                         onChanged: (value) {
                           setState(() {
-                            emailValue = _emailController.text;
+                            _emailValue = _emailController.text;
                           });
                         },
                         validator: (emailValue) {
@@ -117,6 +119,11 @@ class _LoginState extends State<Login> {
                       const SizedBox(height: 10),
                       TextFormField(
                         controller: _passController,
+                        onChanged: (value) {
+                          setState(() {
+                            _passValue = _passController.text;
+                          });
+                        },
                         validator: (passValue) {
                           if (passValue!.isEmpty){
                             return "Please input the correct password";
@@ -158,10 +165,36 @@ class _LoginState extends State<Login> {
                       CustomButton(
                         onPressed: () {
                           if (!formKey.currentState!.validate()){
-                            print("invalid");
+                            return;
                           }
                           else{
-                            print("valid");
+                            auth.signInWithEmailAndPassword(
+                                _emailValue,
+                                _passValue
+                            ).
+                            then((value) async {
+                              if (value == null){
+                                return showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) => AlertDialog(
+                                    title: const Text('Error'),
+                                    content: const Text('Your username or password is incorrect'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context, 'OK'),
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+
+                              return Navigator.push(
+                                  context, MaterialPageRoute(
+                                  builder: (context) => HomeScreen(auth: auth))
+                              );
+
+                            });
                           }
                         },
                         btnName: 'Sign In',
