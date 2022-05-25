@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_safe_campus/constants.dart';
 import 'package:my_safe_campus/views/homeScreen.dart';
 import '../services/auth.dart';
@@ -42,23 +43,23 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
         }),
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: FaIcon(FontAwesomeIcons.house),
             // label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.article),
+            icon: FaIcon(FontAwesomeIcons.newspaper),
             // label: 'Charities',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.report),
+            icon: FaIcon(FontAwesomeIcons.house),
             // label: 'Explore',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.emergency_rounded),
+            icon: FaIcon(FontAwesomeIcons.house),
             // label: 'Profile',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.history),
+            icon: FaIcon(FontAwesomeIcons.house),
             // label: 'Profile',
           ),
         ],

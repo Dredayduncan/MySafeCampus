@@ -34,6 +34,7 @@ dependencies:
   audioplayers:
   shared_preferences: ^2.0.13
   url_launcher:
+  font_awesome_flutter: ^10.1.0
 
   flutter:
     sdk: flutter
