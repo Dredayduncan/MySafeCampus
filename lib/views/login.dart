@@ -61,15 +61,6 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilisi tempor fringilla.",
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
                   Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Form(
@@ -115,6 +106,8 @@ class _LoginState extends State<Login> {
                           const SizedBox(height: 20),
                           CustomButton(
                             onPressed: () {
+
+                              // Check if the front end validation has passed
                               if (!formKey.currentState!.validate()) {
                                 return;
                               } else {
@@ -122,6 +115,7 @@ class _LoginState extends State<Login> {
                                 setState(() {
                                   _isLoading = true;
                                 });
+
                                 auth
                                     .signInWithEmailAndPassword(
                                         _emailValue, _passValue)

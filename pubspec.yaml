@@ -31,6 +31,7 @@ dependencies:
   firebase_core:
   flutter_phone_direct_caller:
   flutter_local_notifications:
+  audioplayers:
   shared_preferences: ^2.0.13
 
   flutter:
