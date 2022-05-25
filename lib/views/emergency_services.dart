@@ -37,13 +37,22 @@ class _EmergencyServicesState extends State<EmergencyServices> {
                     child: Center(
                         child: Text(
                       contacts[index]["label"],
-                      style:
-                          const TextStyle(color: Colors.white, fontSize: 20.0),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Quattrocentro',
+                        fontSize: 20.0,
+                      ),
                     )),
                   ),
                 ),
-                title: Text(contacts[index]["title"]),
-                subtitle: Text(contacts[index]['subtitle']),
+                title: Text(
+                  contacts[index]["title"],
+                  style: TextStyle(fontFamily: 'Quattrocentro'),
+                ),
+                subtitle: Text(
+                  contacts[index]['subtitle'],
+                  style: TextStyle(fontFamily: 'Quattrocentro'),
+                ),
                 trailing: const Icon(
                   Icons.arrow_forward_ios,
                   size: 20.0,

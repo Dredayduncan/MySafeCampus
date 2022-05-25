@@ -40,21 +40,27 @@ class BlogItem extends StatelessWidget {
             ),
             title: Text(
               name != null ? name! : '',
+              style: const TextStyle(fontFamily: 'Quattrocentro'),
             ),
             subtitle: Text(
               duration != null ? duration! : '',
+              style: const TextStyle(fontFamily: 'Quattrocentro'),
             ),
           ),
           const SizedBox(height: 10),
           Text(
             title != null ? title! : '',
             style: const TextStyle(
+              fontFamily: 'Poppins',
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 10),
-          Text(content != null ? content! : ''),
+          Text(
+            content != null ? content! : '',
+            style: const TextStyle(fontFamily: 'Quattrocentro'),
+          ),
           const SizedBox(height: 20),
           CustomButton(onPressed: () {}, btnName: "Read More"),
         ],

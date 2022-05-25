@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Container(
             width: double.infinity,
-            height: 150,
+            height: 180,
             color: kAccentColor,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -32,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text(
                     "We’re here for \nyou",
                     style: TextStyle(
+                      fontFamily: 'Poppins',
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
                       color: kWhiteTextColor,
@@ -41,7 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text(
                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Arcu auctor mattis neque, sed vel turpis posuere mi tortor. Amet eget sem vel amet. ",
                     style: TextStyle(
-                      fontSize: 14,
+                      fontFamily: 'Quattrocentro',
+                      fontSize: 16,
                       color: kWhiteTextColor,
                     ),
                   ),
@@ -56,6 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
               "Click the button to sound an alarm and alert emergency contacts.",
               textAlign: TextAlign.center,
               style: TextStyle(
+                fontFamily: 'Quattrocentro',
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: kDarkTextColor,

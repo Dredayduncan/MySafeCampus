@@ -28,6 +28,7 @@ class _HistoryState extends State<History> {
                 children: const [
                   TabBar(
                     labelColor: Color(0xFF1E1E1E),
+                    labelStyle: TextStyle(fontFamily: 'Quattrocentro'),
                     indicator: BoxDecoration(
                       color: kDefaultBackground,
                       borderRadius: BorderRadius.all(

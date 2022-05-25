@@ -37,6 +37,7 @@ class _ReportState extends State<Report> {
                 "Fill the reporting form",
                 textAlign: TextAlign.center,
                 style: TextStyle(
+                  fontFamily: 'Poppins',
                   fontSize: kDefaultHeading,
                   fontWeight: FontWeight.bold,
                 ),
@@ -45,6 +46,9 @@ class _ReportState extends State<Report> {
               const Text(
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sit amet posuere feugiat lorem. Magna urna ut blandit adipiscing. Enim turpis vitae vel netus tincidunt massa pellentesque. Senectus sagittis pellentesque velit non egestas nulla eget consectetur. Quis amet est hendrerit ac commodo.",
                 textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'Quattrocentro',
+                ),
               ),
               const SizedBox(height: 20),
               CustomButton(

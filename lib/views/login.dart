@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_safe_campus/constants.dart';
 import 'package:my_safe_campus/services/auth.dart';
-import 'package:my_safe_campus/views/homeScreen.dart';
 import 'package:my_safe_campus/views/loading_screen.dart';
 import 'package:my_safe_campus/widgets/custom_button.dart';
 import 'package:my_safe_campus/widgets/custom_textfield.dart';

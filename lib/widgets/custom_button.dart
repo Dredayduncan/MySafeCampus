@@ -29,6 +29,7 @@ class CustomButton extends StatelessWidget {
             Text(
               btnName,
               style: TextStyle(
+                fontFamily: 'Quattrocentro',
                 fontSize: 18,
                 color: backgroundColor == kDefaultBackground
                     ? kWhiteTextColor
