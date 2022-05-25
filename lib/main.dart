@@ -1,7 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:my_safe_campus/views/homeScreen.dart';
-import 'package:my_safe_campus/views/landingPage.dart';
 import 'package:my_safe_campus/views/login.dart';
 import 'package:my_safe_campus/widgets/custom_bottom_navigation.dart';
 import 'package:shared_preferences/shared_preferences.dart';

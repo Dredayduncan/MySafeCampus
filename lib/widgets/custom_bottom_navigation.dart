@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_safe_campus/constants.dart';
 import 'package:my_safe_campus/views/homeScreen.dart';
 import '../services/auth.dart';
@@ -33,33 +34,32 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
-        backgroundColor: kDefaultBackground,
+        backgroundColor: kAccentColor,
         activeColor: Colors.white,
         inactiveColor: const Color(0xFFc18a8b),
-        border: Border.all(color: Colors.white),
         currentIndex: _currentIndex,
         onTap: (int index) => setState(() {
           _currentIndex = index;
         }),
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: FaIcon(FontAwesomeIcons.house),
             // label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.article),
+            icon: FaIcon(FontAwesomeIcons.newspaper),
             // label: 'Charities',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.report),
+            icon: FaIcon(FontAwesomeIcons.house),
             // label: 'Explore',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.emergency),
+            icon: FaIcon(FontAwesomeIcons.house),
             // label: 'Profile',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.history),
+            icon: FaIcon(FontAwesomeIcons.house),
             // label: 'Profile',
           ),
         ],

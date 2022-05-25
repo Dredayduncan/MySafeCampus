@@ -10,43 +10,25 @@ class History extends StatefulWidget {
 }
 
 class _HistoryState extends State<History> {
-  List tabBars = [
-    Text("SMS"),
-    Text("Calls"),
-    Text("Reports")
-  ];
+  List tabBars = [const Text("SMS"), const Text("Calls"), const Text("Reports")];
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        appBar: CustomAppBar(
-          title: "History",
-          // tabBar: const TabBar(
-          //   indicatorColor: Color(0xFFFCF4E1),
-          //   tabs: [
-          //     Tab(
-          //       text: "SMS",
-          //     ),
-          //     Tab(
-          //       text: "Calls",
-          //     ),
-          //     Tab(
-          //       text: "Reports",
-          //     ),
-          //   ],
-          // ),
-        ),
-        body: DefaultTabController(
-          length: 3,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-            child: Column(
-              children: [
-                Container(
-                  child: const TabBar(
+          appBar: const CustomAppBar(
+            title: "History",
+          ),
+          body: DefaultTabController(
+            length: 3,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+              child: Column(
+                children: const [
+                  TabBar(
                     labelColor: Color(0xFF1E1E1E),
+                    labelStyle: TextStyle(fontFamily: 'Quattrocentro'),
                     indicator: BoxDecoration(
                       color: kDefaultBackground,
                       borderRadius: BorderRadius.all(
@@ -54,13 +36,7 @@ class _HistoryState extends State<History> {
                       ),
                     ),
                     indicatorWeight: 2,
-                    indicatorPadding: EdgeInsets.only(top:40),
-                    // indicator: ShapeDecoration(
-                    //   shape: RoundedRectangleBorder(
-                    //     borderRadius: BorderRadius.all(Radius.circular(4.0))
-                    //   ),
-                    //   color: Colors.red
-                    // ),
+                    indicatorPadding: EdgeInsets.only(top: 40),
                     tabs: [
                       Align(
                         alignment: Alignment.centerLeft,
@@ -78,13 +54,11 @@ class _HistoryState extends State<History> {
                         ),
                       ),
                     ],
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
-          ),
-        )
-      ),
+          )),
     );
   }
 }
