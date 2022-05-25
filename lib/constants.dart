@@ -8,4 +8,4 @@ const Color kWhiteTextColor = Colors.white;
 const Color kDarkTextColor = Colors.black;
 const Color kLightTextColor = Colors.white60;
 const Color kDefaultBackground = Color(0xFF922E2E);
-const Color kDefaultButton = Color(0xFF922E2E);
+const Color kAccentColor = Color(0xFFAA3C3F);

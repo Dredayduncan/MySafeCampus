@@ -22,8 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Container(
             width: double.infinity,
-            height: 150,
-            color: const Color(0xFF922E2E),
+            height: 180,
+            color: kAccentColor,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(
@@ -32,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text(
                     "We’re here for \nyou",
                     style: TextStyle(
+                      fontFamily: 'Poppins',
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
                       color: kWhiteTextColor,
@@ -41,7 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text(
                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Arcu auctor mattis neque, sed vel turpis posuere mi tortor. Amet eget sem vel amet. ",
                     style: TextStyle(
-                      fontSize: 14,
+                      fontFamily: 'Quattrocentro',
+                      fontSize: 16,
                       color: kWhiteTextColor,
                     ),
                   ),
@@ -50,13 +52,17 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(height: 50),
-          const Text(
-            "Click the button to sound an alarm and alert emergency contacts.",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: kDarkTextColor,
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Text(
+              "Click the button to sound an alarm and alert emergency contacts.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Quattrocentro',
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: kDarkTextColor,
+              ),
             ),
           ),
           const Spacer(),
@@ -76,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   elevation: MaterialStateProperty.all(15),
                 ),
                 child: const Icon(
-                  Icons.report,
+                  Icons.report_problem_rounded,
                   size: 50,
                 ),
               ),

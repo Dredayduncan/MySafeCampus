@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_safe_campus/constants.dart';
 import 'package:my_safe_campus/services/auth.dart';
-import 'package:my_safe_campus/views/homeScreen.dart';
 import 'package:my_safe_campus/views/loading_screen.dart';
 import 'package:my_safe_campus/widgets/custom_button.dart';
 import 'package:my_safe_campus/widgets/custom_textfield.dart';
@@ -52,7 +50,7 @@ class _LoginState extends State<Login> {
                   ),
                   const SizedBox(height: 10),
                   const Padding(
-                    padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
+                    padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
                     child: Text(
                       "Let's log you in.",
                       style: TextStyle(
@@ -62,12 +60,10 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                     child: Text(
                       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilisi tempor fringilla.",
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
+                      style: TextStyle(),
                     ),
                   ),
                   Padding(
@@ -115,6 +111,7 @@ class _LoginState extends State<Login> {
                           const SizedBox(height: 20),
                           CustomButton(
                             onPressed: () {
+                              // Check if the front end validation has passed
                               if (!formKey.currentState!.validate()) {
                                 return;
                               } else {
@@ -122,6 +119,7 @@ class _LoginState extends State<Login> {
                                 setState(() {
                                   _isLoading = true;
                                 });
+
                                 auth
                                     .signInWithEmailAndPassword(
                                         _emailValue, _passValue)
