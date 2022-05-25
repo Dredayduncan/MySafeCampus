@@ -5,7 +5,6 @@ import 'package:my_safe_campus/views/login.dart';
 import '../services/auth.dart';
 
 class LandingPage extends StatefulWidget {
-
   LandingPage({Key? key}) : super(key: key);
 
   @override
@@ -25,28 +24,27 @@ class _LandingPageState extends State<LandingPage> {
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
         stream: auth.authStateChanges(),
-        builder: (context, snapshot){
+        builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.active) {
-          final user = snapshot.data;
+            final user = snapshot.data;
 
-          //Check if the user has signed in
-          if (user == null) {
-            //Display the signIn page if the user has not logged in
-            return const Login();
-          }
+            //Check if the user has signed in
+            if (user == null) {
+              //Display the signIn page if the user has not logged in
+              return const Login();
+            }
 
-          // Redirect the user to the main screen if they're logged in already
-          return HomeScreen(auth: auth);
+            // Redirect the user to the main screen if they're logged in already
+            return HomeScreen(auth: auth);
           }
 
           //Display a loading UI while the data is loading
           return const Scaffold(
+            // backgroundColor: Colors.white,
             body: Center(
               child: CircularProgressIndicator(),
             ),
           );
-      }
-    );
-
+        });
   }
 }
