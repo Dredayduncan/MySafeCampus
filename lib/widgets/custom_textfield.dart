@@ -8,14 +8,16 @@ class CustomTextField extends StatelessWidget {
   final IconData icon;
   final Function(String) onChanged;
   final String? Function(String?)? validator;
+  bool obscureText;
 
-  const CustomTextField({
+  CustomTextField({
     Key? key,
     required this.controller,
     required this.hintText,
     required this.onChanged,
     required this.validator,
     required this.icon,
+    this.obscureText = false
   }) : super(key: key);
 
   @override
@@ -24,6 +26,7 @@ class CustomTextField extends StatelessWidget {
       controller: controller,
       onChanged: onChanged,
       validator: validator,
+      obscureText: obscureText,
       style: const TextStyle(color: kDarkTextColor),
       decoration: InputDecoration(
         hintText: hintText,

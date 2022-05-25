@@ -94,6 +94,7 @@ class _LoginState extends State<Login> {
                           CustomTextField(
                             controller: _passController,
                             hintText: 'Password',
+                            obscureText: true,
                             icon: Icons.lock,
                             onChanged: (value) {
                               setState(() {
