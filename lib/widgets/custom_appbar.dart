@@ -3,11 +3,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../constants.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
-  final String title;
+  final String? title;
 
   const CustomAppBar({
     Key? key,
-    required this.title,
+    this.title,
   }) : super(key: key);
 
   @override
@@ -24,7 +24,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
     return AppBar(
       backgroundColor: kDefaultBackground,
       elevation: 0,
-      title: Text(widget.title),
+      title: Text(widget.title != null ? widget.title! : ''),
+      centerTitle: false,
       actions: const [
         Padding(
           padding: EdgeInsets.only(right: 20.0),

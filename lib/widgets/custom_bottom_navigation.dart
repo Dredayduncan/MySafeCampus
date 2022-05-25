@@ -36,7 +36,6 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
         backgroundColor: kDefaultBackground,
         activeColor: Colors.white,
         inactiveColor: const Color(0xFFc18a8b),
-        border: Border.all(color: Colors.white),
         currentIndex: _currentIndex,
         onTap: (int index) => setState(() {
           _currentIndex = index;
@@ -55,7 +54,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
             // label: 'Explore',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.emergency),
+            icon: Icon(Icons.emergency_rounded),
             // label: 'Profile',
           ),
           BottomNavigationBarItem(

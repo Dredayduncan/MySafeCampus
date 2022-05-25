@@ -16,9 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: "",
-      ),
+      appBar: const CustomAppBar(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -52,13 +50,16 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(height: 50),
-          const Text(
-            "Click the button to sound an alarm and alert emergency contacts.",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: kDarkTextColor,
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Text(
+              "Click the button to sound an alarm and alert emergency contacts.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: kDarkTextColor,
+              ),
             ),
           ),
           const Spacer(),
@@ -78,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   elevation: MaterialStateProperty.all(15),
                 ),
                 child: const Icon(
-                  Icons.report,
+                  Icons.report_problem_rounded,
                   size: 50,
                 ),
               ),
