@@ -153,7 +153,7 @@ class _LoginState extends State<Login> {
 
                                   return Navigator.of(context,
                                           rootNavigator: true)
-                                      .pushNamed('/home');
+                                      .pushReplacementNamed('/home');
                                 });
                               }
                             },
