@@ -33,7 +33,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
-        backgroundColor: kDefaultBackground,
+        backgroundColor: kAccentColor,
         activeColor: Colors.white,
         inactiveColor: const Color(0xFFc18a8b),
         currentIndex: _currentIndex,

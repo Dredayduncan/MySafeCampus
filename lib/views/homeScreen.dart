@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             width: double.infinity,
             height: 150,
-            color: const Color(0xFF922E2E),
+            color: kAccentColor,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(

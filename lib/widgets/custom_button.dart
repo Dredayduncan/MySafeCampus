@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import '../constants.dart';
 
@@ -5,11 +7,13 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String btnName;
   final Color? backgroundColor;
+  final IconData? buttonIcon;
   const CustomButton({
     Key? key,
     required this.onPressed,
     required this.btnName,
-    this.backgroundColor = kDefaultButton,
+    this.backgroundColor = kDefaultBackground,
+    this.buttonIcon,
   }) : super(key: key);
 
   @override
@@ -19,14 +23,21 @@ class CustomButton extends StatelessWidget {
       height: 60,
       child: ElevatedButton(
         onPressed: onPressed,
-        child: Text(
-          btnName,
-          style: TextStyle(
-            fontSize: 18,
-            color: backgroundColor == kDefaultBackground
-                ? kWhiteTextColor
-                : kDarkTextColor,
-          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              btnName,
+              style: TextStyle(
+                fontSize: 18,
+                color: backgroundColor == kDefaultBackground
+                    ? kWhiteTextColor
+                    : kDarkTextColor,
+              ),
+            ),
+            const SizedBox(width: 10),
+            buttonIcon != null ? Icon(buttonIcon) : const SizedBox(width: 0)
+          ],
         ),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(backgroundColor),

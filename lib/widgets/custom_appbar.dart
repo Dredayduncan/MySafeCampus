@@ -22,7 +22,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: kDefaultBackground,
+      backgroundColor: kAccentColor,
       elevation: 0,
       title: Text(widget.title != null ? widget.title! : ''),
       centerTitle: false,
