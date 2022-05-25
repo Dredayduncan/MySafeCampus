@@ -33,6 +33,7 @@ dependencies:
   flutter_local_notifications:
   audioplayers:
   shared_preferences: ^2.0.13
+  font_awesome_flutter: ^10.1.0
 
   flutter:
     sdk: flutter

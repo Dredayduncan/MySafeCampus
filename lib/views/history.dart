@@ -10,7 +10,7 @@ class History extends StatefulWidget {
 }
 
 class _HistoryState extends State<History> {
-  List tabBars = [Text("SMS"), Text("Calls"), Text("Reports")];
+  List tabBars = [const Text("SMS"), const Text("Calls"), const Text("Reports")];
 
   @override
   Widget build(BuildContext context) {

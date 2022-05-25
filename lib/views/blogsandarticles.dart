@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_safe_campus/model/blog_model.dart';
 import 'package:my_safe_campus/widgets/custom_appbar.dart';
-import 'package:my_safe_campus/widgets/custom_button.dart';
 
 import '../widgets/blog_item.dart';
 

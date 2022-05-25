@@ -47,11 +47,11 @@ class _EmergencyServicesState extends State<EmergencyServices> {
                 ),
                 title: Text(
                   contacts[index]["title"],
-                  style: TextStyle(fontFamily: 'Quattrocentro'),
+                  style: const TextStyle(fontFamily: 'Quattrocentro'),
                 ),
                 subtitle: Text(
                   contacts[index]['subtitle'],
-                  style: TextStyle(fontFamily: 'Quattrocentro'),
+                  style: const TextStyle(fontFamily: 'Quattrocentro'),
                 ),
                 trailing: const Icon(
                   Icons.arrow_forward_ios,
