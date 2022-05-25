@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_safe_campus/constants.dart';
 import 'package:my_safe_campus/widgets/custom_appbar.dart';
+import 'package:my_safe_campus/widgets/custom_tab_label.dart';
+
+import '../widgets/custom_history_tile.dart';
+import '../widgets/custom_list_tile.dart';
 
 class History extends StatefulWidget {
   const History({Key? key}) : super(key: key);
@@ -11,6 +15,12 @@ class History extends StatefulWidget {
 
 class _HistoryState extends State<History> {
   List tabBars = [const Text("SMS"), const Text("Calls"), const Text("Reports")];
+
+  List contacts = [
+    {"label": "FR", "title": "First Respondent Team", "subtitle": "0322043112"},
+    {"label": "FR", "title": "First Respondent Team", "subtitle": "0322043112"},
+    {"label": "FR", "title": "First Respondent Team", "subtitle": "0322043112"},
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +35,8 @@ class _HistoryState extends State<History> {
             child: Padding(
               padding: const EdgeInsets.only(left: 16.0, right: 16.0),
               child: Column(
-                children: const [
-                  TabBar(
+                children: [
+                  const TabBar(
                     labelColor: Color(0xFF1E1E1E),
                     labelStyle: TextStyle(fontFamily: 'Quattrocentro'),
                     indicator: BoxDecoration(
@@ -40,20 +50,68 @@ class _HistoryState extends State<History> {
                     tabs: [
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Tab(
-                          text: "SMS",
+                        child:  Tab(
+                          child: CustomTabLabel(
+                              label: "SMS"),
                         ),
                       ),
                       Tab(
-                        text: "Calls",
+                        child: CustomTabLabel(
+                      label: "Calls"),
                       ),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Tab(
-                          text: "Reports",
+                        child:  Tab(
+                          child: CustomTabLabel(
+                              label: "Reports"),
                         ),
                       ),
                     ],
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                        children: [
+                          ListView.builder(
+                            itemCount: contacts.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Padding(
+                                  padding: const EdgeInsets.only(top: 12.0),
+                                  child: CustomHistoryTile(
+                                    title: contacts[index]["title"],
+                                    icon: Icons.sms,
+                                    subtitle: contacts[index]["subtitle"],
+                                  )
+                              );
+                            }
+                          ),
+                          ListView.builder(
+                              itemCount: contacts.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Padding(
+                                    padding: const EdgeInsets.only(top: 12.0),
+                                    child: CustomHistoryTile(
+                                      title: contacts[index]["title"],
+                                      icon: Icons.call,
+                                      subtitle: contacts[index]["subtitle"],
+                                    )
+                                );
+                              }
+                          ),
+                          ListView.builder(
+                              itemCount: contacts.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Padding(
+                                    padding: const EdgeInsets.only(top: 12.0),
+                                    child: CustomHistoryTile(
+                                      title: contacts[index]["title"],
+                                      icon: Icons.insert_drive_file_sharp,
+                                      subtitle: contacts[index]["subtitle"],
+                                    )
+                                );
+                              }
+                          ),
+                        ]
+                    ),
                   )
                 ],
               ),
