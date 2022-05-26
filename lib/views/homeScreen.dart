@@ -26,20 +26,14 @@ class _HomeScreenState extends State<HomeScreen> {
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
     const iOS = IOSInitializationSettings();
 
-    const settings = InitializationSettings(
-      android: android,
-      iOS: iOS
-    );
+    const settings = InitializationSettings(android: android, iOS: iOS);
 
-    _notifications.initialize(
-      settings,
-      onSelectNotification: (payload) async {
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => HomeScreen(auth: widget.auth))
-        );
-      }
-    );
+    _notifications.initialize(settings, onSelectNotification: (payload) async {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => HomeScreen(auth: widget.auth)));
+    });
   }
 
   @override
@@ -94,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          const Spacer(),
+          SizedBox(height: 90),
           Align(
             alignment: Alignment.center,
             child: SizedBox(
@@ -104,8 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () {
                   _showNotification(
                       title: "Alert Sent!",
-                      body: "Emergency contacts have received your alert."
-                  );
+                      body: "Emergency contacts have received your alert.");
                 },
                 style: ButtonStyle(
                   backgroundColor:
@@ -134,12 +127,13 @@ class _HomeScreenState extends State<HomeScreen> {
     int id = 0,
     String? title,
     String? body,
-  }) async => _notifications.show(
-    id,
-    title,
-    body,
-    await _notificationDetails(), //Await because this is an async function
-  );
+  }) async =>
+      _notifications.show(
+        id,
+        title,
+        body,
+        await _notificationDetails(), //Await because this is an async function
+      );
 
   Future _notificationDetails() async {
     return const NotificationDetails(
@@ -149,7 +143,11 @@ class _HomeScreenState extends State<HomeScreen> {
         channelDescription: "Channel Description",
         importance: Importance.high,
       ),
-      iOS: IOSNotificationDetails(),
+      iOS: IOSNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        subtitle: 'MySafe Campus',
+      ),
     );
   }
 }
