@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:my_safe_campus/constants.dart';
 import 'package:my_safe_campus/services/auth.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ic.dart';
 import '../widgets/custom_appbar.dart';
@@ -14,6 +16,32 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // set up notifications by instantiate the notification object
+  late FlutterLocalNotificationsPlugin _notifications;
+
+  _HomeScreenState() {
+    // set up notifications
+    _notifications = FlutterLocalNotificationsPlugin();
+
+    const android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const iOS = IOSInitializationSettings();
+
+    const settings = InitializationSettings(
+      android: android,
+      iOS: iOS
+    );
+
+    _notifications.initialize(
+      settings,
+      onSelectNotification: (payload) async {
+        Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen(auth: widget.auth))
+        );
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,7 +101,12 @@ class _HomeScreenState extends State<HomeScreen> {
               width: 150,
               height: 150,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  _showNotification(
+                      title: "Alert Sent!",
+                      body: "Emergency contacts have received your alert."
+                  );
+                },
                 style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all(kDefaultBackground),
@@ -93,6 +126,30 @@ class _HomeScreenState extends State<HomeScreen> {
           const Spacer(),
         ],
       ),
+    );
+  }
+
+  // The function responsible for sending push notifications
+  Future _showNotification({
+    int id = 0,
+    String? title,
+    String? body,
+  }) async => _notifications.show(
+    id,
+    title,
+    body,
+    await _notificationDetails(), //Await because this is an async function
+  );
+
+  Future _notificationDetails() async {
+    return const NotificationDetails(
+      android: AndroidNotificationDetails(
+        'channelId',
+        'Local Notification',
+        channelDescription: "Channel Description",
+        importance: Importance.high,
+      ),
+      iOS: IOSNotificationDetails(),
     );
   }
 }
