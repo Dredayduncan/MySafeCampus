@@ -46,6 +46,7 @@ dependencies:
   dots_indicator: ^2.1.0
   iconify_flutter: ^0.0.4
   font_awesome_flutter: ^10.1.0
+  chat_bubbles: ^1.2.0
 
 dev_dependencies:
   flutter_test:

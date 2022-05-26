@@ -12,8 +12,8 @@ class EmergencyServices extends StatefulWidget {
 class _EmergencyServicesState extends State<EmergencyServices> {
   List contacts = [
     {"label": "FR", "title": "First Respondent Team", "subtitle": "0322043112"},
-    {"label": "FR", "title": "First Respondent Team", "subtitle": "0322043112"},
-    {"label": "FR", "title": "First Respondent Team", "subtitle": "0322043112"},
+    {"label": "FR", "title": "Andrew", "subtitle": "0322043112"},
+    {"label": "FR", "title": "Akwasi", "subtitle": "0322043112"},
   ];
 
   @override
