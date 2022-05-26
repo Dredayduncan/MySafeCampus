@@ -34,7 +34,6 @@ dependencies:
   audioplayers: ^0.20.1
   shared_preferences: ^2.0.13
   url_launcher:
-  font_awesome_flutter: ^10.1.0
 
   flutter:
     sdk: flutter
@@ -45,6 +44,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_spinkit: ^5.1.0
   dots_indicator: ^2.1.0
+  iconify_flutter: ^0.0.4
+  font_awesome_flutter: ^10.1.0
 
 dev_dependencies:
   flutter_test:

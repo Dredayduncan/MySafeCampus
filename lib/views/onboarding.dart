@@ -24,8 +24,8 @@ class _OnboardingState extends State<Onboarding> {
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
+    _controller.dispose();
   }
 
   @override
@@ -40,131 +40,119 @@ class _OnboardingState extends State<Onboarding> {
       },
       itemBuilder: (_, i) {
         return Scaffold(
-          extendBodyBehindAppBar: true,
+          // extendBodyBehindAppBar: true,
           appBar: AppBar(
-            backgroundColor: Colors.transparent,
+            backgroundColor: kDefaultBackground,
             elevation: 0,
           ),
-          backgroundColor: Colors.white,
-          body: Stack(
-            children: [
-              Container(
-                width: double.infinity,
-                height: double.infinity,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage(
-                      contents[i].image,
-                    ),
+          backgroundColor: kDefaultBackground,
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  height: 350,
+                  child: Image(image: AssetImage(contents[i].image)),
+                ),
+                const Spacer(),
+                Text(
+                  contents[i].title,
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                    color: kWhiteTextColor,
                   ),
                 ),
-              ),
-              Container(
-                height: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.black.withOpacity(0.6),
-                      Colors.black,
-                    ],
-                    stops: const [
-                      0.0,
-                      1,
-                    ],
+                const SizedBox(height: 5),
+                Text(
+                  contents[i].content,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: inactiveColor,
                   ),
                 ),
-              ),
-              Positioned(
-                bottom: 30,
-                left: 10,
-                right: 10,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                const Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      contents[i].title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
+                    TextButton(
+                      onPressed: () {
+                        _controller.previousPage(
+                          duration: const Duration(milliseconds: 200),
+                          curve: Curves.bounceIn,
+                        );
+                      },
+                      style: TextButton.styleFrom(
+                        textStyle: const TextStyle(
+                          fontFamily: 'Poppins',
+                          color: kWhiteTextColor,
+                        ),
+                        padding: EdgeInsets.zero,
+                        minimumSize: const Size(50, 30),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        alignment: Alignment.centerLeft,
+                      ),
+                      child: Text(
+                        currentIndex == 0 ? '' : 'Previous',
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          color: kWhiteTextColor,
+                        ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      contents[i].content,
-                      style: const TextStyle(
-                        color: kLightTextColor,
-                        fontSize: kDefaultFontSize,
-                        height: 1.5,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10, bottom: 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          DotsIndicator(
-                            dotsCount: 3,
-                            position: currentIndex.toDouble(),
-                            decorator: DotsDecorator(
-                              size: const Size.square(9.0),
-                              color: Colors.grey,
-                              spacing: const EdgeInsets.all(3),
-                              sizes: const [
-                                Size(12, 12),
-                                Size(12, 12),
-                                Size(12, 12),
-                              ],
-                              activeSize: const Size(50.0, 9.0),
-                              activeColor: Colors.white,
-                              activeShape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              if (currentIndex == contents.length - 1) {
-                                Navigator.of(context, rootNavigator: true)
-                                    .pushNamedAndRemoveUntil(
-                                        '/login', (route) => false);
-                              }
-                              _controller.nextPage(
-                                duration: const Duration(milliseconds: 200),
-                                curve: Curves.bounceIn,
-                              );
-                            },
-                            child: Row(
-                              children: const [
-                                Padding(
-                                  padding: EdgeInsets.only(right: 10.0),
-                                  child: DefaultTextStyle(
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                    ),
-                                    child: Text('Next'),
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.white,
-                                )
-                              ],
-                            ),
-                          )
+                    DotsIndicator(
+                      dotsCount: 3,
+                      position: currentIndex.toDouble(),
+                      decorator: DotsDecorator(
+                        size: const Size.square(8.0),
+                        color: inactiveColor,
+                        spacing: const EdgeInsets.all(3),
+                        sizes: const [
+                          Size(8, 8),
+                          Size(8, 8),
+                          Size(8, 8),
                         ],
+                        activeSize: const Size(50.0, 8.0),
+                        activeColor: Colors.white,
+                        activeShape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
                       ),
-                    )
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        if (currentIndex == contents.length - 1) {
+                          Navigator.of(context, rootNavigator: true)
+                              .pushNamedAndRemoveUntil(
+                                  '/login', (route) => false);
+                        }
+                        _controller.nextPage(
+                          duration: const Duration(milliseconds: 200),
+                          curve: Curves.bounceIn,
+                        );
+                      },
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: const Size(50, 30),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        alignment: Alignment.centerRight,
+                      ),
+                      child: const Text(
+                        'Next',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: kWhiteTextColor,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-              )
-            ],
+                const Padding(padding: EdgeInsets.only(bottom: 40))
+              ],
+            ),
           ),
         );
       },

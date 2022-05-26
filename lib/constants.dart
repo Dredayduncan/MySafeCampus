@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 const double kDefaultPadding = 20.0;
-Color inactiveColor = kDarkTextColor.withOpacity(0.5);
+Color inactiveColor = kWhiteTextColor.withOpacity(0.7);
 const double kDefaultFontSize = 16;
 const double kDefaultHeading = 20;
 const Color kWhiteTextColor = Colors.white;

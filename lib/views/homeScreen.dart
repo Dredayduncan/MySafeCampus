@@ -3,7 +3,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:my_safe_campus/constants.dart';
 import 'package:my_safe_campus/services/auth.dart';
 import 'package:audioplayers/audioplayers.dart';
-
+import 'package:iconify_flutter/iconify_flutter.dart';
+import 'package:iconify_flutter/icons/ic.dart';
 import '../widgets/custom_appbar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -114,9 +115,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   shape: MaterialStateProperty.all(const CircleBorder()),
                   elevation: MaterialStateProperty.all(15),
                 ),
-                child: const Icon(
-                  Icons.report_problem_rounded,
-                  size: 50,
+                child: const Iconify(
+                  Ic.baseline_crisis_alert,
+                  size: 70,
+                  color: kWhiteTextColor,
                 ),
               ),
             ),

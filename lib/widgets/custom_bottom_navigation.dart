@@ -43,23 +43,38 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
         }),
         items: const [
           BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.house),
+            icon: FaIcon(
+              FontAwesomeIcons.house,
+              size: 24,
+            ),
             // label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.newspaper),
+            icon: FaIcon(
+              FontAwesomeIcons.newspaper,
+              size: 24,
+            ),
             // label: 'Charities',
           ),
           BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.house),
+            icon: FaIcon(
+              FontAwesomeIcons.circleExclamation,
+              size: 24,
+            ),
             // label: 'Explore',
           ),
           BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.house),
+            icon: FaIcon(
+              FontAwesomeIcons.starOfLife,
+              size: 24,
+            ),
             // label: 'Profile',
           ),
           BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.house),
+            icon: FaIcon(
+              FontAwesomeIcons.clockRotateLeft,
+              size: 24,
+            ),
             // label: 'Profile',
           ),
         ],

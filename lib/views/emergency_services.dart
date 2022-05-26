@@ -23,17 +23,18 @@ class _EmergencyServicesState extends State<EmergencyServices> {
         title: "Emergency Services",
       ),
       body: ListView.builder(
-          itemCount: contacts.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Padding(
-              padding: const EdgeInsets.only(top: 12.0),
-              child: CustomListTile(
-                title: contacts[index]["title"],
-                label: contacts[index]["label"],
-                subtitle: contacts[index]["subtitle"],
-              )
-            );
-          }),
+        itemCount: contacts.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Padding(
+            padding: const EdgeInsets.only(top: 12.0),
+            child: CustomListTile(
+              title: contacts[index]["title"],
+              label: contacts[index]["label"],
+              subtitle: contacts[index]["subtitle"],
+            ),
+          );
+        },
+      ),
     );
   }
 }
