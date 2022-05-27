@@ -4,10 +4,16 @@ import 'package:my_safe_campus/constants.dart';
 import 'package:my_safe_campus/widgets/custom_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../services/auth.dart';
 import '../widgets/custom_appbar.dart';
 
 class Report extends StatefulWidget {
-  const Report({Key? key}) : super(key: key);
+  final Auth auth;
+
+  const Report({
+    Key? key,
+    required this.auth
+  }) : super(key: key);
 
   @override
   State<Report> createState() => _ReportState();

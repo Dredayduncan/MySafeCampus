@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:my_safe_campus/services/auth.dart';
 import 'package:my_safe_campus/views/chat_screen.dart';
 import 'package:my_safe_campus/views/login.dart';
 import 'package:my_safe_campus/views/notifications_page.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/onboard': (context) => const Onboarding(),
         '/login': (context) => const Login(),
-        '/home': (context) => const CustomBottomNavigation(),
+        '/home': (context) => CustomBottomNavigation(auth: Auth(),),
         '/notifications': (context) => const NotificationScreen(),
       },
     );

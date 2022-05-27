@@ -9,6 +9,7 @@ class CustomListTile extends StatelessWidget {
   final String subtitle;
   final String label;
   final bool? notif;
+  String? currentUserID;
   String messageID;
 
   CustomListTile({
@@ -18,6 +19,7 @@ class CustomListTile extends StatelessWidget {
     required this.subtitle,
     required this.label,
     this.notif = false,
+    this.currentUserID
   }) : super(key: key);
 
   @override
@@ -85,7 +87,8 @@ class CustomListTile extends StatelessWidget {
                     Navigator.of(context, rootNavigator: true)
                         .push(MaterialPageRoute(
                             builder: (_) => ChatScreen(
-                                  sender: title,
+                                  respondentName: title,
+                                  sender: currentUserID!,
                                   chatID: messageID,
                                 )));
                   },

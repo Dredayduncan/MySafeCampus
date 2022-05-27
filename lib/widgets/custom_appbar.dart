@@ -25,6 +25,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
     return AppBar(
       backgroundColor: kAccentColor,
       elevation: 0,
+      // automaticallyImplyLeading: false,
       title: Text(
         widget.title != null ? widget.title! : '',
         style: const TextStyle(fontFamily: 'Poppins'),

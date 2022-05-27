@@ -14,8 +14,9 @@ import '../model/chat_model.dart';
 class ChatScreen extends StatefulWidget {
   final String chatID;
   final String sender;
+  final String respondentName;
 
-  const ChatScreen({Key? key, required this.chatID, required this.sender})
+  const ChatScreen({Key? key, required this.chatID, required this.sender, required this.respondentName})
       : super(key: key);
 
   @override
@@ -30,14 +31,14 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    chatManager = ChatManager(userID: 'JhgCXwOw8KfYGOvotDjvHbHlJ2l2');
+    chatManager = ChatManager(userID: widget.sender);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: widget.sender,
+        title: widget.respondentName,
       ),
       backgroundColor: const Color(0xFFF6F6F6),
       bottomSheet: Container(
@@ -131,7 +132,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       itemBuilder: ((context, index) {
                         // final Chat chat = chats[index];
                         bool isMe = chats[index]["sender"].id ==
-                            "JhgCXwOw8KfYGOvotDjvHbHlJ2l2";
+                            widget.sender;
                         return _buildMessage(chats[index], isMe);
                       }),
                     ),

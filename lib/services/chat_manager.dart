@@ -29,21 +29,18 @@ class ChatManager {
 
   // Send a chat to the respondent
   Future<dynamic> sendChat({messageID, chat}) async {
-    CollectionReference messages =
-        FirebaseFirestore.instance.collection("messages");
+    CollectionReference messages = FirebaseFirestore.instance.collection(
+        "messages");
 
-    return messages
-        .doc(messageID)
-        .update({
-          "chat": FieldValue.arrayUnion([
-            {
-              "chat": chat,
-              "sender":
-                  FirebaseFirestore.instance.collection('users').doc(userID),
-              "timeSent": DateTime.now()
-            }
-          ])
-        })
+    return messages.doc(messageID).update({
+      "chat": FieldValue.arrayUnion([
+        {
+          "chat": chat,
+          "sender": FirebaseFirestore.instance.collection('users').doc(userID),
+          "timeSent": DateTime.now()
+        }
+      ])
+    })
         .then((value) => true)
         .catchError((error) => false);
   }
