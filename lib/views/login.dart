@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_safe_campus/services/auth.dart';
 import 'package:my_safe_campus/views/loading_screen.dart';
+import 'package:my_safe_campus/widgets/custom_bottom_navigation.dart';
 import 'package:my_safe_campus/widgets/custom_button.dart';
 import 'package:my_safe_campus/widgets/custom_textfield.dart';
 
@@ -151,14 +152,21 @@ class _LoginState extends State<Login> {
                                     const Duration(seconds: 2),
                                   );
 
-                                  // set isLoading to false
-                                  setState(() {
-                                    _isLoading = false;
-                                  });
+                                  // // set isLoading to false
+                                  // setState(() {
+                                  //   _isLoading = false;
+                                  //   Navigator.of(context, rootNavigator: true).push(
+                                  //     MaterialPageRoute(
+                                  //       builder: (context) => HomeScreen(auth: auth,)
+                                  //     )
+                                  //   );
+                                  // });
 
-                                  return Navigator.of(context,
-                                          rootNavigator: true)
-                                      .pushReplacementNamed('/home');
+                                  return Navigator.of(context, rootNavigator: true).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) => CustomBottomNavigation(auth: auth,)
+                                    )
+                                  );
                                 });
                               }
                             },

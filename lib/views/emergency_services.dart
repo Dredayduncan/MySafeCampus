@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:my_safe_campus/widgets/custom_appbar.dart';
 import 'package:my_safe_campus/widgets/custom_list_tile.dart';
 
+import '../services/auth.dart';
+
 class EmergencyServices extends StatefulWidget {
-  const EmergencyServices({Key? key}) : super(key: key);
+  final Auth auth;
+  const EmergencyServices({Key? key, required this.auth}) : super(key: key);
 
   @override
   State<EmergencyServices> createState() => _EmergencyServicesState();
@@ -28,6 +31,7 @@ class _EmergencyServicesState extends State<EmergencyServices> {
           return Padding(
             padding: const EdgeInsets.only(top: 12.0),
             child: CustomListTile(
+              currentUserID: widget.auth.currentUser!.uid,
               title: contacts[index]["title"],
               label: contacts[index]["label"],
               subtitle: contacts[index]["subtitle"],

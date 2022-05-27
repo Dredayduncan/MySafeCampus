@@ -11,7 +11,8 @@ import '../views/issue_reporting.dart';
 import 'package:my_safe_campus/services/auth.dart';
 
 class CustomBottomNavigation extends StatefulWidget {
-  const CustomBottomNavigation({Key? key}) : super(key: key);
+  final Auth auth;
+  const CustomBottomNavigation({Key? key, required this.auth}) : super(key: key);
 
   @override
   State<CustomBottomNavigation> createState() => _CustomBottomNavigationState();
@@ -21,14 +22,22 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
   // This widget is the root of your application.
   int _currentIndex = 0;
 
-  final screens = [
-    HomeScreen(auth: Auth()),
-    const Articles(),
-    const Report(),
-    const EmergencyServices(),
-    const History(),
-    // const ProfilePage(),
-  ];
+  late List screens;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    screens = [
+      HomeScreen(auth: widget.auth),
+      const Articles(),
+      Report(auth: widget.auth,),
+      EmergencyServices(auth: widget.auth),
+      History(auth: widget.auth),
+      // const ProfilePage(),
+    ];
+  }
+
 
   @override
   Widget build(BuildContext context) {

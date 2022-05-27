@@ -3,11 +3,13 @@ import 'package:my_safe_campus/constants.dart';
 import 'package:my_safe_campus/widgets/custom_appbar.dart';
 import 'package:my_safe_campus/widgets/custom_tab_label.dart';
 
+import '../services/auth.dart';
 import '../widgets/custom_history_tile.dart';
 import '../widgets/custom_list_tile.dart';
 
 class History extends StatefulWidget {
-  const History({Key? key}) : super(key: key);
+  final Auth auth;
+  const History({Key? key, required this.auth}) : super(key: key);
 
   @override
   State<History> createState() => _HistoryState();

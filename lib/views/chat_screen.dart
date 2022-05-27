@@ -1,6 +1,7 @@
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:my_safe_campus/constants.dart';
 import 'package:my_safe_campus/model/messages_model.dart';
 import 'package:my_safe_campus/model/user_model.dart';
@@ -13,8 +14,9 @@ import '../model/chat_model.dart';
 class ChatScreen extends StatefulWidget {
   final String chatID;
   final String sender;
+  final String respondentName;
 
-  const ChatScreen({Key? key, required this.chatID, required this.sender})
+  const ChatScreen({Key? key, required this.chatID, required this.sender, required this.respondentName})
       : super(key: key);
 
   @override
@@ -29,20 +31,14 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    chatManager = ChatManager(userID: "B8FQSYI6zdZw7RYxk9Eig2WyyVe2");
+    chatManager = ChatManager(userID: widget.sender);
   }
-
-  final User currentUser = User(
-    '0',
-    'Akwasi',
-    'emailAddress',
-  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: widget.sender,
+        title: widget.respondentName,
       ),
       backgroundColor: const Color(0xFFF6F6F6),
       bottomSheet: Container(
@@ -72,7 +68,15 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     sendMsg: IconButton(
                       onPressed: () {
-                        chatManager.sendChat(messageID: widget.chatID, chat: _chatController.text);
+                        if (_chatController.text.isEmpty) {
+                          return;
+                        } else {
+                          chatManager.sendChat(
+                            messageID: widget.chatID,
+                            chat: _chatController.text,
+                          );
+                          _chatController.clear();
+                        }
                       },
                       icon: const Icon(
                         Icons.send,
@@ -86,10 +90,11 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       ),
       body: SingleChildScrollView(
+        reverse: true,
         child: StreamBuilder<DocumentSnapshot>(
           stream: chatManager.getChatStream(messageID: widget.chatID),
-          builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
-
+          builder:
+              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             //Check if an error occurred
             if (snapshot.hasError) {
               return const Text("Something went wrong");
@@ -104,7 +109,7 @@ class _ChatScreenState extends State<ChatScreen> {
               );
             }
 
-            if (snapshot.data == null){
+            if (snapshot.data == null) {
               return const Center(child: Text("Say Something."));
             }
 
@@ -115,14 +120,23 @@ class _ChatScreenState extends State<ChatScreen> {
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: chats.length,
-                  itemBuilder: ((context, index) {
-                    // final Chat chat = chats[index];
-                    bool isMe = chats[index]["sender"].id == "B8FQSYI6zdZw7RYxk9Eig2WyyVe2";
-                    return _buildMessage(chats[index], isMe);
-                  }),
+                Flexible(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).size.height * 0.11,
+                    ),
+                    child: ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: chats.length,
+                      itemBuilder: ((context, index) {
+                        // final Chat chat = chats[index];
+                        bool isMe = chats[index]["sender"].id ==
+                            widget.sender;
+                        return _buildMessage(chats[index], isMe);
+                      }),
+                    ),
+                  ),
                 ),
               ],
             );
