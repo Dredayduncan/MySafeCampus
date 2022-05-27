@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:my_safe_campus/views/chat_screen.dart';
 import 'package:my_safe_campus/views/login.dart';
+import 'package:my_safe_campus/views/notifications_page.dart';
 import 'package:my_safe_campus/widgets/custom_bottom_navigation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,6 +33,7 @@ class MyApp extends StatelessWidget {
         '/onboard': (context) => const Onboarding(),
         '/login': (context) => const Login(),
         '/home': (context) => const CustomBottomNavigation(),
+        '/notifications': (context) => const NotificationScreen(),
       },
     );
   }

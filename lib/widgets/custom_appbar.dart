@@ -3,10 +3,12 @@ import '../constants.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String? title;
+  final bool? showNotif;
 
   const CustomAppBar({
     Key? key,
     this.title,
+    this.showNotif = false,
   }) : super(key: key);
 
   @override
@@ -28,11 +30,17 @@ class _CustomAppBarState extends State<CustomAppBar> {
         style: const TextStyle(fontFamily: 'Poppins'),
       ),
       centerTitle: false,
-      actions: const [
+      actions: [
         Padding(
           padding: EdgeInsets.only(right: 20.0),
-          child: Icon(
-            Icons.notifications_rounded,
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context, rootNavigator: true)
+                  .pushNamed('/notifications');
+            },
+            child: Icon(
+              Icons.notifications_rounded,
+            ),
           ),
         )
       ],
