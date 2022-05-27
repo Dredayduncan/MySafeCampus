@@ -34,10 +34,8 @@ class ChatManager{
     return messages.doc(messageID).update({
       "chat": FieldValue.arrayUnion([
         {
-          "senderID": FirebaseFirestore.instance.collection('users').doc(
-              userID),
           "chat": chat,
-          "sender": FirebaseFirestore.instance.collection('Users').doc(userID),
+          "sender": FirebaseFirestore.instance.collection('users').doc(userID),
           "timeSent": DateTime.now()
         }
       ])
@@ -45,6 +43,8 @@ class ChatManager{
         .then((value) => true)
         .catchError((error) => false);
   }
+
+  //Upload a
 
 
 

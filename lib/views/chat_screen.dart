@@ -29,7 +29,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    chatManager = ChatManager(userID: widget.sender);
+    chatManager = ChatManager(userID: "B8FQSYI6zdZw7RYxk9Eig2WyyVe2");
   }
 
   final User currentUser = User(
