@@ -1,8 +1,10 @@
 import 'package:chat_bubbles/chat_bubbles.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_safe_campus/constants.dart';
 import 'package:my_safe_campus/model/messages_model.dart';
 import 'package:my_safe_campus/model/user_model.dart';
+import 'package:my_safe_campus/services/chat_manager.dart';
 import 'package:my_safe_campus/widgets/custom_appbar.dart';
 import 'package:my_safe_campus/widgets/custom_textfield.dart';
 
@@ -21,6 +23,14 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _chatController = TextEditingController();
+  // Initialise the chat manager
+  late ChatManager chatManager;
+
+  @override
+  void initState() {
+    super.initState();
+    chatManager = ChatManager(userID: widget.sender);
+  }
 
   final User currentUser = User(
     '0',
@@ -61,7 +71,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                     sendMsg: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        chatManager.sendChat(messageID: widget.chatID, chat: _chatController.text);
+                      },
                       icon: const Icon(
                         Icons.send,
                       ),
@@ -74,28 +86,56 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: chats.length,
-              itemBuilder: ((context, index) {
-                final Chat chat = chats[index];
-                bool isMe = chat.sender == currentUser.name;
-                return _buildMessage(chat, isMe);
-              }),
-            ),
-          ],
+        child: StreamBuilder<DocumentSnapshot>(
+          stream: chatManager.getChatStream(messageID: widget.chatID),
+          builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
+
+            //Check if an error occurred
+            if (snapshot.hasError) {
+              return const Text("Something went wrong");
+            }
+
+            // Check if the connection is still loading
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: kDefaultBackground,
+                ),
+              );
+            }
+
+            if (snapshot.data == null){
+              return const Center(child: Text("Say Something."));
+            }
+
+            // Get the chats between the user and the respondent
+            var doc = snapshot.data as DocumentSnapshot;
+            List chats = doc['chat'];
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: chats.length,
+                  itemBuilder: ((context, index) {
+                    // final Chat chat = chats[index];
+                    bool isMe = chats[index]["sender"].id == "B8FQSYI6zdZw7RYxk9Eig2WyyVe2";
+                    return _buildMessage(chats[index], isMe);
+                  }),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
   }
 }
 
-_buildMessage(Chat message, bool isMe) {
+_buildMessage(Map<String, dynamic> message, bool isMe) {
   return BubbleSpecialThree(
-    text: message.chat,
+    text: message["chat"],
     color: isMe ? kDefaultBackground : kDefaultBackground.withOpacity(0.7),
     tail: true,
     textStyle: const TextStyle(color: Colors.white, fontSize: 16),

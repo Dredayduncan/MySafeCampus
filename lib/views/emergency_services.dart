@@ -12,7 +12,7 @@ class EmergencyServices extends StatefulWidget {
 class _EmergencyServicesState extends State<EmergencyServices> {
   List contacts = [
     {"label": "FR", "title": "First Respondent Team", "subtitle": "0322043112"},
-    {"label": "FR", "title": "Andrew", "subtitle": "0322043112"},
+    {"label": "FR", "title": "Andrew", "subtitle": "0322043112", "messageID": "1"},
     {"label": "FR", "title": "Akwasi", "subtitle": "0322043112"},
   ];
 
@@ -31,6 +31,7 @@ class _EmergencyServicesState extends State<EmergencyServices> {
               title: contacts[index]["title"],
               label: contacts[index]["label"],
               subtitle: contacts[index]["subtitle"],
+              messageID: contacts[index].containsKey("messageID") == true ? contacts[index]['messageID'] : "",
             ),
           );
         },
