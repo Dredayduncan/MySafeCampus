@@ -19,7 +19,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             CustomListTile(
               title: 'Alert',
               subtitle: 'Emergency alert sent',

@@ -9,9 +9,11 @@ class CustomListTile extends StatelessWidget {
   final String subtitle;
   final String label;
   final bool? notif;
+  String messageID;
 
-  const CustomListTile({
+  CustomListTile({
     Key? key,
+    this.messageID = "",
     required this.title,
     required this.subtitle,
     required this.label,
@@ -84,7 +86,7 @@ class CustomListTile extends StatelessWidget {
                         .push(MaterialPageRoute(
                             builder: (_) => ChatScreen(
                                   sender: title,
-                                  chatID: '',
+                                  chatID: messageID,
                                 )));
                   },
                 ),

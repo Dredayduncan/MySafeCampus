@@ -86,19 +86,4 @@ class Database {
         .catchError((error) => null);
   }
 
-  // Get user's chats
-  Future<List> getChats(chatID) async {
-
-    //Get all the posts
-    return FirebaseFirestore.instance.collection("chats").doc(chatID).get().then((value) {
-      List chats = value['chat'];
-      chats.sort((a, b) {
-        var adate = a['timeSent'].toDate().toString();
-        var bdate = b['timeSent'].toDate().toString();
-        return bdate.compareTo(adate);
-      });
-
-      return chats;
-    });
-  }
 }
