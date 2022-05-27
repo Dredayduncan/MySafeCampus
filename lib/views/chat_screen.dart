@@ -122,7 +122,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 Flexible(
                   child: Padding(
                     padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).size.height * 0.08,
+                      bottom: MediaQuery.of(context).size.height * 0.11,
                     ),
                     child: ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
