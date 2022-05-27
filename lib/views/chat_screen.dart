@@ -16,7 +16,11 @@ class ChatScreen extends StatefulWidget {
   final String sender;
   final String respondentName;
 
-  const ChatScreen({Key? key, required this.chatID, required this.sender, required this.respondentName})
+  const ChatScreen(
+      {Key? key,
+      required this.chatID,
+      required this.sender,
+      required this.respondentName})
       : super(key: key);
 
   @override
@@ -131,8 +135,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       itemCount: chats.length,
                       itemBuilder: ((context, index) {
                         // final Chat chat = chats[index];
-                        bool isMe = chats[index]["sender"].id ==
-                            widget.sender;
+                        bool isMe = chats[index]["sender"].id == widget.sender;
                         return _buildMessage(chats[index], isMe);
                       }),
                     ),
