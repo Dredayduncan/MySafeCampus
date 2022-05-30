@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_safe_campus/constants.dart';
 import 'package:my_safe_campus/widgets/custom_appbar.dart';
 import 'package:my_safe_campus/widgets/custom_list_tile.dart';
-
 import '../services/auth.dart';
+import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 
 class EmergencyServices extends StatefulWidget {
   final Auth auth;
@@ -15,7 +17,12 @@ class EmergencyServices extends StatefulWidget {
 class _EmergencyServicesState extends State<EmergencyServices> {
   List contacts = [
     {"label": "FR", "title": "First Respondent Team", "subtitle": "0322043112"},
-    {"label": "FR", "title": "Andrew", "subtitle": "0322043112", "messageID": "1"},
+    {
+      "label": "FR",
+      "title": "Andrew",
+      "subtitle": "0322043112",
+      "messageID": "1"
+    },
     {"label": "FR", "title": "Akwasi", "subtitle": "0322043112"},
   ];
 
@@ -24,6 +31,21 @@ class _EmergencyServicesState extends State<EmergencyServices> {
     return Scaffold(
       appBar: const CustomAppBar(
         title: "Emergency Services",
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          try {
+            final contact = await FlutterContactPicker.pickPhoneContact();
+          } on UserCancelledPickingException catch (e) {
+            if (e == 'CANCELLED') {
+              return;
+            }
+            return;
+          }
+        },
+        backgroundColor: kDefaultBackground,
+        elevation: 10,
+        child: const FaIcon(FontAwesomeIcons.addressBook),
       ),
       body: ListView.builder(
         itemCount: contacts.length,
@@ -35,7 +57,9 @@ class _EmergencyServicesState extends State<EmergencyServices> {
               title: contacts[index]["title"],
               label: contacts[index]["label"],
               subtitle: contacts[index]["subtitle"],
-              messageID: contacts[index].containsKey("messageID") == true ? contacts[index]['messageID'] : "",
+              messageID: contacts[index].containsKey("messageID") == true
+                  ? contacts[index]['messageID']
+                  : "",
             ),
           );
         },
