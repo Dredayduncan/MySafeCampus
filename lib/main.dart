@@ -1,13 +1,20 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:my_safe_campus/services/auth.dart';
-import 'package:my_safe_campus/views/chat_screen.dart';
 import 'package:my_safe_campus/views/login.dart';
 import 'package:my_safe_campus/views/notifications_page.dart';
 import 'package:my_safe_campus/widgets/custom_bottom_navigation.dart';
+import 'package:my_safe_campus/widgets/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'views/onboarding.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+  print('Handling a background message ${message.messageId}');
+}
 
 int? initScreen;
 Future<void> main() async {
@@ -17,11 +24,54 @@ Future<void> main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   initScreen = prefs.getInt("initScreen");
   await prefs.setInt("initScreen", 1);
-  runApp(const MyApp());
+
+  // Setup notifications
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  // const MyApp({Key? key}) : super(key: key);
+
+  MyApp({Key? key}) : super(key: key) {
+    CustomNotification customNotification = CustomNotification();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification!;
+      AndroidNotification android = message.notification!.android!;
+      if (notification != null && android != null) {
+        customNotification.showNotification(
+          remoteNotification: notification
+        );
+      }
+    });
+
+    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    //   RemoteNotification notification = message.notification;
+    //   AndroidNotification android = message.notification?.android;
+    //   if (notification != null && android != null) {
+    //     showDialog(
+    //       // context: context,
+    //         builder: (_) {
+    //           return AlertDialog(
+    //             title: Text(notification.title),
+    //             content: SingleChildScrollView(
+    //               child: Column(
+    //                 crossAxisAlignment: CrossAxisAlignment.start,
+    //                 children: [Text(notification.body)],
+    //               ),
+    //             ),
+    //           );
+    //         });
+    //   }
+    // });
+  }
 
   @override
   Widget build(BuildContext context) {

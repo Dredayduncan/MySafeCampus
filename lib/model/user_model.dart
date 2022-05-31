@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:iconify_flutter/icons/heroicons_outline.dart';
+
 class User {
   final String? userID;
   final String? name;
@@ -24,5 +27,5 @@ class User {
         'userID': userID.toString(),
         'name': name,
         'emailAddress': emailAddress,
-      };
+  };
 }

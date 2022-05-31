@@ -27,12 +27,16 @@ class ChatManager {
         .snapshots();
   }
 
-  // Send a chat to the respondent
-  Future<dynamic> sendChat({messageID, chat}) async {
+  /* Start a new conversation with the respondent where the messageID
+    is a concatenation of the sender's id and the recipient's id
+  */
+  Future<dynamic> startConversation({messageID, recipientID, chat}) async {
     CollectionReference messages = FirebaseFirestore.instance.collection(
         "messages");
 
-    return messages.doc(messageID).update({
+    return messages.doc(messageID).set({
+      "sender": FirebaseFirestore.instance.collection('users').doc(userID),
+      "recipient": FirebaseFirestore.instance.collection('users').doc(recipientID),
       "chat": FieldValue.arrayUnion([
         {
           "chat": chat,
@@ -44,4 +48,24 @@ class ChatManager {
         .then((value) => true)
         .catchError((error) => false);
   }
+
+  // Send a chat to the respondent
+  Future<dynamic> sendChat({messageID, chat}) async {
+    CollectionReference messages = FirebaseFirestore.instance.collection(
+        "messages");
+
+    return messages.doc("1").update({
+      "chat": FieldValue.arrayUnion([
+        {
+          "chat": chat,
+          "sender": FirebaseFirestore.instance.collection('users').doc(userID),
+          "timeSent": DateTime.now()
+        }
+      ])
+    })
+        .then((value) => true)
+        .catchError((error) => false);
+  }
+
+
 }

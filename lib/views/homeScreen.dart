@@ -1,11 +1,12 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:my_safe_campus/constants.dart';
 import 'package:my_safe_campus/services/auth.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ic.dart';
 import '../widgets/custom_appbar.dart';
+import '../widgets/notification.dart';
 
 class HomeScreen extends StatefulWidget {
   final Auth? auth;
@@ -16,25 +17,26 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // set up notifications by instantiate the notification object
-  late FlutterLocalNotificationsPlugin _notifications;
+  late CustomNotification _notification;
 
-  _HomeScreenState() {
-    // set up notifications
-    _notifications = FlutterLocalNotificationsPlugin();
+  _HomeScreenState(){
+    FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+    firebaseMessaging.requestPermission();
 
-    const android = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const iOS = IOSInitializationSettings();
+    firebaseMessaging.getToken().then((token) {
+      if (token != null){
+        widget.auth!.updateData(userID: widget.auth!.currentUser!.uid, token: token);
+      }
+    });
 
-    const settings = InitializationSettings(android: android, iOS: iOS);
-
-    _notifications.initialize(settings, onSelectNotification: (payload) async {
+    _notification = CustomNotification(onClick: (payload) async {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => HomeScreen(auth: widget.auth)));
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -96,9 +98,14 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 150,
               child: ElevatedButton(
                 onPressed: () {
-                  _showNotification(
+                  // _notification.showNotification(
+                  //     title: "Alert Sent!",
+                  //     body: "Emergency contacts have received your alert.");
+                  _notification.sendNotification(
+                      to: "f0pGtlmaT_C6uqldsZb1aN:APA91bHjpAyUxLAMTLmp_wk9XoukrKXmkZvt2ZNX-Gdqx2O2RNa70E6VzVyOmgnjscTmRfo799kHM205hB_Ekizx9faQB04Ogw4quLuaYPUsiHMajT5fXoOFUTlwi2SQD3ZfCKfOwH1W",
                       title: "Alert Sent!",
-                      body: "Emergency contacts have received your alert.");
+                      body: "Emergency contacts have received your alert"
+                  );
                 },
                 style: ButtonStyle(
                   backgroundColor:
@@ -118,35 +125,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const Spacer(),
         ],
-      ),
-    );
-  }
-
-  // The function responsible for sending push notifications
-  Future _showNotification({
-    int id = 0,
-    String? title,
-    String? body,
-  }) async =>
-      _notifications.show(
-        id,
-        title,
-        body,
-        await _notificationDetails(), //Await because this is an async function
-      );
-
-  Future _notificationDetails() async {
-    return const NotificationDetails(
-      android: AndroidNotificationDetails(
-        'channelId',
-        'Local Notification',
-        channelDescription: "Channel Description",
-        importance: Importance.high,
-      ),
-      iOS: IOSNotificationDetails(
-        presentAlert: true,
-        presentBadge: true,
-        subtitle: 'MySafe Campus',
       ),
     );
   }

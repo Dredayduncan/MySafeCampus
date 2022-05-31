@@ -14,9 +14,9 @@ class EmergencyServices extends StatefulWidget {
 
 class _EmergencyServicesState extends State<EmergencyServices> {
   List contacts = [
-    {"label": "FR", "title": "First Respondent Team", "subtitle": "0322043112"},
-    {"label": "FR", "title": "Andrew", "subtitle": "0322043112", "messageID": "1"},
-    {"label": "FR", "title": "Akwasi", "subtitle": "0322043112"},
+    {"label": "FR", "title": "First Respondent Team", "subtitle": "0322043112", "respondentID": "2"},
+    {"label": "FR", "title": "Andrew", "subtitle": "0322043112", "respondentID": "1"},
+    {"label": "FR", "title": "Akwasi", "subtitle": "0322043112", "respondentID": "3"},
   ];
 
   @override
@@ -35,7 +35,8 @@ class _EmergencyServicesState extends State<EmergencyServices> {
               title: contacts[index]["title"],
               label: contacts[index]["label"],
               subtitle: contacts[index]["subtitle"],
-              messageID: contacts[index].containsKey("messageID") == true ? contacts[index]['messageID'] : "",
+              messageID: widget.auth.currentUser!.uid + contacts[index]["respondentID"],
+              respondentID: contacts[index]["respondentID"]
             ),
           );
         },
