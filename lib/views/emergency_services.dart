@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_safe_campus/constants.dart';
 import 'package:my_safe_campus/widgets/custom_appbar.dart';
 import 'package:my_safe_campus/widgets/custom_list_tile.dart';
-
 import '../services/auth.dart';
+import 'package:fluttercontactpicker/fluttercontactpicker.dart';
 
 class EmergencyServices extends StatefulWidget {
   final Auth auth;
@@ -25,6 +27,21 @@ class _EmergencyServicesState extends State<EmergencyServices> {
       appBar: const CustomAppBar(
         title: "Emergency Services",
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          try {
+            final contact = await FlutterContactPicker.pickPhoneContact();
+          } on UserCancelledPickingException catch (e) {
+            if (e == 'CANCELLED') {
+              return;
+            }
+            return;
+          }
+        },
+        backgroundColor: kDefaultBackground,
+        elevation: 10,
+        child: const FaIcon(FontAwesomeIcons.addressBook),
+      ),
       body: ListView.builder(
         itemCount: contacts.length,
         itemBuilder: (BuildContext context, int index) {
@@ -37,6 +54,7 @@ class _EmergencyServicesState extends State<EmergencyServices> {
               subtitle: contacts[index]["subtitle"],
               messageID: widget.auth.currentUser!.uid + contacts[index]["respondentID"],
               respondentID: contacts[index]["respondentID"]
+
             ),
           );
         },

@@ -51,6 +51,7 @@ dependencies:
   iconify_flutter: ^0.0.4
   font_awesome_flutter: ^10.1.0
   chat_bubbles: ^1.2.0
+  fluttercontactpicker: ^4.7.0
 
 dev_dependencies:
   flutter_test:

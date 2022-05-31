@@ -178,8 +178,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       itemCount: chats.length,
                       itemBuilder: ((context, index) {
                         // final Chat chat = chats[index];
-                        bool isMe = chats[index]["sender"].id ==
-                            widget.senderID;
+                        bool isMe = chats[index]["sender"].id == widget.senderID;
+
                         return _buildMessage(chats[index], isMe);
                       }),
                     ),
