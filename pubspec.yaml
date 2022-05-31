@@ -29,6 +29,8 @@ environment:
 dependencies:
   firebase_auth: ^3.3.11
   firebase_core:
+  cloud_firestore: ^3.1.16
+  firebase_storage: ^10.2.17
   flutter_phone_direct_caller:
   flutter_local_notifications:
   audioplayers: ^0.20.1
@@ -47,6 +49,7 @@ dependencies:
   iconify_flutter: ^0.0.4
   font_awesome_flutter: ^10.1.0
   chat_bubbles: ^1.2.0
+  fluttercontactpicker: ^4.7.0
 
 dev_dependencies:
   flutter_test:
