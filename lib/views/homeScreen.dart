@@ -1,11 +1,12 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:my_safe_campus/constants.dart';
 import 'package:my_safe_campus/services/auth.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ic.dart';
 import '../widgets/custom_appbar.dart';
+import '../widgets/notification.dart';
 
 class HomeScreen extends StatefulWidget {
   final Auth? auth;
@@ -16,25 +17,33 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // set up notifications by instantiate the notification object
-  late FlutterLocalNotificationsPlugin _notifications;
+  late CustomNotification _notification;
 
-  _HomeScreenState() {
-    // set up notifications
-    _notifications = FlutterLocalNotificationsPlugin();
+  _HomeScreenState(){
 
-    const android = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const iOS = IOSInitializationSettings();
+    //TO DO
+    /*Make a check for the user being an emergency service and assign
+    a push token so they can receive push notifications
+     */
+    FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+    firebaseMessaging.requestPermission();
 
-    const settings = InitializationSettings(android: android, iOS: iOS);
-
-    _notifications.initialize(settings, onSelectNotification: (payload) async {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => HomeScreen(auth: widget.auth)));
+    firebaseMessaging.getToken().then((token) {
+      if (token != null){
+        widget.auth!.updateData(userID: widget.auth!.currentUser!.uid, token: token);
+      }
     });
+
+    _notification = CustomNotification(
+    //     onClick: (payload) async {
+    //   Navigator.push(
+    //       context,
+    //       MaterialPageRoute(
+    //           builder: (context) => HomeScreen(auth: widget.auth)));
+    // }
+    );
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -96,9 +105,10 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 150,
               child: ElevatedButton(
                 onPressed: () {
-                  _showNotification(
-                      title: "Alert Sent!",
-                      body: "Emergency contacts have received your alert.");
+                  _notification.showNotificationToUser(
+                    title: "Alert Sent!",
+                    body: "Emergency contacts have received your alert"
+                  );
                 },
                 style: ButtonStyle(
                   backgroundColor:
@@ -118,35 +128,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const Spacer(),
         ],
-      ),
-    );
-  }
-
-  // The function responsible for sending push notifications
-  Future _showNotification({
-    int id = 0,
-    String? title,
-    String? body,
-  }) async =>
-      _notifications.show(
-        id,
-        title,
-        body,
-        await _notificationDetails(), //Await because this is an async function
-      );
-
-  Future _notificationDetails() async {
-    return const NotificationDetails(
-      android: AndroidNotificationDetails(
-        'channelId',
-        'Local Notification',
-        channelDescription: "Channel Description",
-        importance: Importance.high,
-      ),
-      iOS: IOSNotificationDetails(
-        presentAlert: true,
-        presentBadge: true,
-        subtitle: 'MySafe Campus',
       ),
     );
   }

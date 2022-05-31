@@ -1,4 +1,5 @@
 // import 'package:ashesicom/services/database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Auth {
@@ -25,6 +26,17 @@ class Auth {
       return null;
     }
   }
+  // Update the notification token
+  Future<dynamic> updateData({userID, token}){
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+
+    return users.doc(userID).update({
+      "pushToken": token
+    })
+        .then((value) => true)
+        .catchError((error) => false);
+  }
+
 
   // // Sign up with email and password
   // Future<User?>createUserWithEmailAndPassword({required String email, required password, required username, required contact}) async {
