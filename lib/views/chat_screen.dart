@@ -41,26 +41,11 @@ class _ChatScreenState extends State<ChatScreen> {
 
   late CustomNotification _notification;
 
-  // _HomeScreenState(){
-  //   _notification = CustomNotification(onClick: (payload) async {
-  //     return;
-  //   });
-  //   //   Navigator.push(
-  //   //       context,
-  //   //       MaterialPageRoute(
-  //   //           builder: (context) => (auth: widget.auth)));
-  //   // });
-  // }
-
   @override
   void initState() {
     super.initState();
     chatManager = ChatManager(userID: widget.senderID);
-    _notification = CustomNotification(onClick: (payload) async {
-      return;
-    });
-    _notification.registerNotification();
-
+    _notification = CustomNotification();
   }
 
   @override
@@ -134,7 +119,7 @@ class _ChatScreenState extends State<ChatScreen> {
       body: SingleChildScrollView(
         reverse: true,
         child: StreamBuilder<DocumentSnapshot>(
-          stream: chatManager.getChatStream(messageID: "1"),
+          stream: chatManager.getChatStream(messageID: widget.messageID),
           builder:
               (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             //Check if an error occurred

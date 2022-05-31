@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:my_safe_campus/widgets/notification.dart';
 
 class ChatManager {
   final String userID;
@@ -50,11 +51,11 @@ class ChatManager {
   }
 
   // Send a chat to the respondent
-  Future<dynamic> sendChat({messageID, chat}) async {
+  Future<dynamic> sendChat({messageID, chat, pushToken}) async {
     CollectionReference messages = FirebaseFirestore.instance.collection(
         "messages");
 
-    return messages.doc("1").update({
+    return messages.doc(messageID).update({
       "chat": FieldValue.arrayUnion([
         {
           "chat": chat,
@@ -63,8 +64,15 @@ class ChatManager {
         }
       ])
     })
-        .then((value) => true)
-        .catchError((error) => false);
+      .then((value) {
+          CustomNotification customNotification = CustomNotification();
+          customNotification.sendNotification(
+              to: "f0pGtlmaT_C6uqldsZb1aN:APA91bHjpAyUxLAMTLmp_wk9XoukrKXmkZvt2ZNX-Gdqx2O2RNa70E6VzVyOmgnjscTmRfo799kHM205hB_Ekizx9faQB04Ogw4quLuaYPUsiHMajT5fXoOFUTlwi2SQD3ZfCKfOwH1W",
+              title: "Message from Andrew",
+              body: chat
+          );
+    })
+      .catchError((error) => false);
   }
 
 

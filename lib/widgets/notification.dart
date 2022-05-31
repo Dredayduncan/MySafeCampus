@@ -32,10 +32,23 @@ class CustomNotification{
     // required String body,
     required RemoteNotification remoteNotification
   }) async =>
+    notifications.show(
+      id,
+      remoteNotification.title,
+      remoteNotification.body,
+      await _notificationDetails(), //Await because this is an async function
+  );
+
+  // The function responsible for sending local notifications
+  Future showNotificationToUser({
+    int id = 0,
+    required String title,
+    required String body,
+  }) async =>
       notifications.show(
         id,
-        remoteNotification.title,
-        remoteNotification.body,
+        title,
+        body,
         await _notificationDetails(), //Await because this is an async function
       );
 
@@ -55,24 +68,6 @@ class CustomNotification{
         subtitle: 'MySafe Campus',
       ),
     );
-  }
-
-  // Send Notifications to the recipient
-  void registerNotification(){
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      if (message.notification != null){
-        // show notification
-        showNotification(
-          // title: widget.respondentName,
-          // body: message.notification
-            remoteNotification: message.notification!
-        );
-
-      }
-
-      return;
-    });
   }
 
 // Send  notification to recipient's device

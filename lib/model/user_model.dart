@@ -27,5 +27,6 @@ class User {
         'userID': userID.toString(),
         'name': name,
         'emailAddress': emailAddress,
+
   };
 }

@@ -20,6 +20,11 @@ class _HomeScreenState extends State<HomeScreen> {
   late CustomNotification _notification;
 
   _HomeScreenState(){
+
+    //TO DO
+    /*Make a check for the user being an emergency service and assign
+    a push token so they can receive push notifications
+     */
     FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
     firebaseMessaging.requestPermission();
 
@@ -29,12 +34,14 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
 
-    _notification = CustomNotification(onClick: (payload) async {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => HomeScreen(auth: widget.auth)));
-    });
+    _notification = CustomNotification(
+    //     onClick: (payload) async {
+    //   Navigator.push(
+    //       context,
+    //       MaterialPageRoute(
+    //           builder: (context) => HomeScreen(auth: widget.auth)));
+    // }
+    );
   }
 
 
@@ -98,13 +105,9 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 150,
               child: ElevatedButton(
                 onPressed: () {
-                  // _notification.showNotification(
-                  //     title: "Alert Sent!",
-                  //     body: "Emergency contacts have received your alert.");
-                  _notification.sendNotification(
-                      to: "f0pGtlmaT_C6uqldsZb1aN:APA91bHjpAyUxLAMTLmp_wk9XoukrKXmkZvt2ZNX-Gdqx2O2RNa70E6VzVyOmgnjscTmRfo799kHM205hB_Ekizx9faQB04Ogw4quLuaYPUsiHMajT5fXoOFUTlwi2SQD3ZfCKfOwH1W",
-                      title: "Alert Sent!",
-                      body: "Emergency contacts have received your alert"
+                  _notification.showNotificationToUser(
+                    title: "Alert Sent!",
+                    body: "Emergency contacts have received your alert"
                   );
                 },
                 style: ButtonStyle(

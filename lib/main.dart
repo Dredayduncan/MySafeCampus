@@ -41,13 +41,14 @@ class MyApp extends StatelessWidget {
   // const MyApp({Key? key}) : super(key: key);
 
   MyApp({Key? key}) : super(key: key) {
+
     CustomNotification customNotification = CustomNotification();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification notification = message.notification!;
-      AndroidNotification android = message.notification!.android!;
-      if (notification != null && android != null) {
+      // RemoteNotification notification = message.notification!;
+      // AndroidNotification android = message.notification!.android!;
+      if (message.notification != null) {
         customNotification.showNotification(
-          remoteNotification: notification
+          remoteNotification: message.notification!
         );
       }
     });
