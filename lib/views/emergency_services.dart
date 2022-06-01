@@ -22,6 +22,11 @@ class _EmergencyServicesState extends State<EmergencyServices> {
 
   late EmergencyContacts contacts;
   late List emergencyServices;
+  Widget _emergencyServicePage = const Center(
+    child:  CircularProgressIndicator(
+      color: kDefaultBackground,
+    ),
+  );
 
   @override
   void initState() {
@@ -81,13 +86,14 @@ class _EmergencyServicesState extends State<EmergencyServices> {
             Expanded(
               child: TabBarView(
                 children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: emergencyServices.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return emergencyServices[index];
-                    },
-                  ),
+                  _emergencyServicePage,
+                  // ListView.builder(
+                  //   shrinkWrap: true,
+                  //   itemCount: emergencyServices.length,
+                  //   itemBuilder: (BuildContext context, int index) {
+                  //     return emergencyServices[index];
+                  //   },
+                  // ),
                   StreamBuilder<DocumentSnapshot>(
                     stream: contacts.getUserEmergencyContacts(),
                     builder: (BuildContext context,
@@ -149,6 +155,15 @@ class _EmergencyServicesState extends State<EmergencyServices> {
 
   generateEmergencyContacts() async {
     emergencyServices = await contacts.getEmergencyContacts();
-    setState(() {});
+    setState(() {
+      _emergencyServicePage = ListView.builder(
+        shrinkWrap: true,
+        itemCount: emergencyServices.length,
+        itemBuilder: (BuildContext context, int index) {
+          return emergencyServices[index];
+        },
+      );
+    });
+
   }
 }
