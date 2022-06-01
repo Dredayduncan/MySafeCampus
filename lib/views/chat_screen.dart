@@ -18,13 +18,15 @@ class ChatScreen extends StatefulWidget {
   final String senderID;
   final String respondentName;
   final String respondentID;
+  final String pushToken;
 
   const ChatScreen({
     Key? key,
     required this.messageID,
     required this.senderID,
     required this.respondentName,
-    required this.respondentID
+    required this.respondentID,
+    required this.pushToken
   }) : super(key: key);
 
   @override
@@ -89,7 +91,8 @@ class _ChatScreenState extends State<ChatScreen> {
                           chatManager.startConversation(
                             messageID: widget.messageID,
                             chat: _chatController.text,
-                            recipientID: widget.respondentID
+                            recipientID: widget.respondentID,
+                            pushToken: widget.pushToken
                           );
 
                           setState(() {
@@ -100,6 +103,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           chatManager.sendChat(
                             messageID: widget.messageID,
                             chat: _chatController.text,
+                            pushToken: widget.pushToken
                           );
                         }
 
@@ -137,16 +141,16 @@ class _ChatScreenState extends State<ChatScreen> {
             }
 
             // Check if there has been no conversation between them
-            if (snapshot.data == null) {
-              setState(() {
-                newChat = true;
-              });
+            if (!snapshot.data!.exists) {
+              // indicate that the chat is new
+              newChat = true;
 
               return const Center(child: Text("Say Something."));
             }
 
             // Get the chats between the user and the respondent
             var doc = snapshot.data as DocumentSnapshot;
+
             List chats = doc['chat'];
 
             return Column(

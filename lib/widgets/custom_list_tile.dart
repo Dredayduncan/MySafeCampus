@@ -12,6 +12,8 @@ class CustomListTile extends StatelessWidget {
   String? currentUserID;
   String messageID;
   String? respondentID;
+  bool? personalContact;
+  String? pushToken;
 
   CustomListTile({
     Key? key,
@@ -19,7 +21,9 @@ class CustomListTile extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.label,
+    this.pushToken,
     this.notif = false,
+    this.personalContact = false,
     this.currentUserID,
     this.respondentID
   }) : super(key: key);
@@ -81,7 +85,7 @@ class CustomListTile extends StatelessWidget {
                     });
                   },
                 ),
-                IconButton(
+                personalContact == true ? const SizedBox.shrink() : IconButton(
                   icon: const Icon(Icons.chat),
                   iconSize: 20.0,
                   color: kDefaultBackground,
@@ -93,6 +97,7 @@ class CustomListTile extends StatelessWidget {
                                   senderID: currentUserID!,
                                   messageID: messageID,
                                   respondentID: respondentID!,
+                                  pushToken: pushToken!
                                 )));
                   },
                 ),

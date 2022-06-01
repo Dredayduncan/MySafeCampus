@@ -1,20 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:my_safe_campus/model/emergency_contact_model.dart';
 import 'package:my_safe_campus/widgets/custom_list_tile.dart';
 
 class EmergencyContacts {
   final String currentUserID;
 
   EmergencyContacts({required this.currentUserID});
-
-  // // Get all emergency contacts
-  // Future<QuerySnapshot<Map<String, dynamic>>> getEmergencyContactIDs() {
-  //
-  //   return FirebaseFirestore.instance
-  //       .collection("emergencyContacts").get();
-  //
-  // }
 
   // Get the user's timeline
   Future<List> getEmergencyContactIDs() async {
@@ -39,14 +30,6 @@ class EmergencyContacts {
 
   }
 
-  // // Get all emergency contacts
-  // List<> getEmergencyContacts() async {
-  //   var ids = await getEmergencyContactIDs();
-  //   return FirebaseFirestore.instance
-  //       .collection("emergencyContacts").snapshots();
-  //
-  // }
-
   // Get the user's timeline
   Future<List> getEmergencyContacts() async {
     List emergencyContacts = [];
@@ -65,29 +48,13 @@ class EmergencyContacts {
               label: "FR",
               subtitle: contactInfo["contact"],
               messageID: currentUserID + contactInfo["id"],
-              respondentID: contactInfo["id"]
+              respondentID: contactInfo["id"],
+              pushToken: contactInfo["pushToken"]
         ),
       ));
     }
     return emergencyContacts;
 
-    // //Get all the people the user is following
-    // return FirebaseFirestore.instance.collection("users").get().then((
-    //     value) async {
-    //   List<DocumentSnapshot> allDocs = value.docs;
-    //
-    //   // get the posts of all the users being followed
-    //   for (var element in allDocs) {
-    //     Map<String, dynamic>? data = element.data() as Map<String, dynamic>?;
-    //
-    //     if (data != null && data['following'].id == authID) {
-    //       List userPosts = await getUserPosts(uid: data['followed'].id);
-    //       posts.addAll(userPosts);
-    //     }
-    //   }
-    //
-    //   return posts;
-    // });
   }
 
   // Get the emergency contacts the user has added
