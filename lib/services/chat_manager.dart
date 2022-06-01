@@ -18,9 +18,6 @@ class ChatManager {
 
   // Get the chats the current user has with the given respondent
   Stream<DocumentSnapshot>? getChatStream({required messageID}) {
-    if (messageID == "") {
-      return null;
-    }
 
     return FirebaseFirestore.instance
         .collection("messages")
@@ -31,7 +28,7 @@ class ChatManager {
   /* Start a new conversation with the respondent where the messageID
     is a concatenation of the sender's id and the recipient's id
   */
-  Future<dynamic> startConversation({messageID, recipientID, chat}) async {
+  Future<dynamic> startConversation({messageID, recipientID, chat, pushToken, senderName}) async {
     CollectionReference messages = FirebaseFirestore.instance.collection(
         "messages");
 
@@ -46,7 +43,14 @@ class ChatManager {
         }
       ])
     })
-        .then((value) => true)
+    .then((value) {
+      CustomNotification customNotification = CustomNotification();
+      customNotification.sendNotification(
+          to: pushToken,
+          title: "Message from Andrew",
+          body: chat
+      );
+    })
         .catchError((error) => false);
   }
 
@@ -67,7 +71,7 @@ class ChatManager {
       .then((value) {
           CustomNotification customNotification = CustomNotification();
           customNotification.sendNotification(
-              to: "f0pGtlmaT_C6uqldsZb1aN:APA91bHjpAyUxLAMTLmp_wk9XoukrKXmkZvt2ZNX-Gdqx2O2RNa70E6VzVyOmgnjscTmRfo799kHM205hB_Ekizx9faQB04Ogw4quLuaYPUsiHMajT5fXoOFUTlwi2SQD3ZfCKfOwH1W",
+              to: pushToken,
               title: "Message from Andrew",
               body: chat
           );
