@@ -9,11 +9,13 @@ class EmergencyContacts {
 
   // Get the user's timeline
   Future<List> getEmergencyContactIDs() async {
-
     List ids = [];
 
     //Get all the ids of emergency contacts and save in the ids list
-    return FirebaseFirestore.instance.collection("emergencyContacts").get().then((value) async {
+    return FirebaseFirestore.instance
+        .collection("emergencyContacts")
+        .get()
+        .then((value) async {
       List<DocumentSnapshot> allDocs = value.docs;
 
       // get the ids of the emergency contacts
@@ -27,7 +29,6 @@ class EmergencyContacts {
 
       return ids;
     });
-
   }
 
   // Get the user's timeline
@@ -37,29 +38,26 @@ class EmergencyContacts {
     //Get all the ids of the emergency contacts
     List ids = await getEmergencyContactIDs();
 
-    for (var id in ids){
+    for (var id in ids) {
       var contactInfo = await getContactInfo(uid: id);
-      emergencyContacts.add(
-          Padding(
-            padding: const EdgeInsets.only(top: 12.0),
-            child: CustomListTile(
-              currentUserID: currentUserID,
-              title: contactInfo!["name"],
-              label: "FR",
-              subtitle: contactInfo["contact"],
-              messageID: currentUserID + contactInfo["id"],
-              respondentID: contactInfo["id"],
-              pushToken: contactInfo["pushToken"]
+      emergencyContacts.add(Padding(
+        padding: const EdgeInsets.only(top: 12.0),
+        child: CustomListTile(
+          currentUserID: currentUserID,
+          title: contactInfo!["name"],
+          label: "FR",
+          subtitle: contactInfo["contact"],
+          messageID: contactInfo["id"] + currentUserID,
+          respondentID: contactInfo["id"],
+          pushToken: contactInfo["pushToken"],
         ),
       ));
     }
     return emergencyContacts;
-
   }
 
   // Get the emergency contacts the user has added
   Stream<DocumentSnapshot>? getUserEmergencyContacts() {
-
     return FirebaseFirestore.instance
         .collection("users")
         .doc(currentUserID)
@@ -70,25 +68,25 @@ class EmergencyContacts {
   Future<dynamic> addEmergencyContact({name, contact}) async {
     CollectionReference users = FirebaseFirestore.instance.collection("users");
 
-    return users.doc(currentUserID).update({
-      "emergencyContacts": FieldValue.arrayUnion([
-        {
-          "name": name,
-          "contact": contact,
-        }
-      ])
-    })
-    .then((value) => true)
-    .catchError((error) => false);
+    return users
+        .doc(currentUserID)
+        .update({
+          "emergencyContacts": FieldValue.arrayUnion([
+            {
+              "name": name,
+              "contact": contact,
+            }
+          ])
+        })
+        .then((value) => true)
+        .catchError((error) => false);
   }
 
   // Get user's info
   Future<Map<String, dynamic>?> getContactInfo({uid}) async {
     // Get the data from the database
-    DocumentSnapshot<Map<String, dynamic>> query = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(uid)
-        .get();
+    DocumentSnapshot<Map<String, dynamic>> query =
+        await FirebaseFirestore.instance.collection("users").doc(uid).get();
 
     // Get the user's data
     var data = query.data();
