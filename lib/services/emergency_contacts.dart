@@ -100,5 +100,49 @@ class EmergencyContacts {
   }
 
   // Method to retrieve the user's that have messaged the emergency Contact
-  Future<List> getChatList({required isEmergencyContact}) async {return [];}
+  Future<List> getChatList({required emergencyContactID}) async {
+
+    // Get all the emergency contacts
+    CollectionReference emergencyContacts = FirebaseFirestore.instance.collection("emergencyContacts");
+
+    return await emergencyContacts
+      .where('contactID', isEqualTo: emergencyContactID)
+      .get()
+      .then((value) async {
+
+      // Retrieve the list of users the emergency contact has conversations with
+      List userChats = value.docs;
+
+      // check if there are no conversations
+      if (userChats.isEmpty){
+        return [];
+      }
+
+      List users = [];
+
+      /* Loop through the ids of the users with conversations and add them to
+      the list
+       */
+      for (var id in userChats){
+        var contactInfo = await getContactInfo(uid: id);
+        users.add(
+            Padding(
+              padding: const EdgeInsets.only(top: 12.0),
+              child: CustomListTile(
+                  currentUserID: currentUserID,
+                  title: contactInfo!["name"],
+                  label: "UR",
+                  subtitle: contactInfo["contact"],
+                  messageID: contactInfo["id"] + currentUserID,
+                  respondentID: contactInfo["id"],
+                  pushToken: contactInfo["pushToken"]
+              ),
+            ));
+      }
+
+      return users;
+
+    });
+  }
+
 }
