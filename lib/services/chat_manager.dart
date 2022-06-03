@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:my_safe_campus/widgets/notification.dart';
 
 class ChatManager {
   final String userID;
@@ -17,9 +18,6 @@ class ChatManager {
 
   // Get the chats the current user has with the given respondent
   Stream<DocumentSnapshot>? getChatStream({required messageID}) {
-    if (messageID == "") {
-      return null;
-    }
 
     return FirebaseFirestore.instance
         .collection("messages")
@@ -27,8 +25,37 @@ class ChatManager {
         .snapshots();
   }
 
+  /* Start a new conversation with the respondent where the messageID
+    is a concatenation of the sender's id and the recipient's id
+  */
+  Future<dynamic> startConversation({messageID, recipientID, chat, pushToken, senderName}) async {
+    CollectionReference messages = FirebaseFirestore.instance.collection(
+        "messages");
+
+    return messages.doc(messageID).set({
+      "sender": FirebaseFirestore.instance.collection('users').doc(userID),
+      "recipient": FirebaseFirestore.instance.collection('users').doc(recipientID),
+      "chat": FieldValue.arrayUnion([
+        {
+          "chat": chat,
+          "sender": FirebaseFirestore.instance.collection('users').doc(userID),
+          "timeSent": DateTime.now()
+        }
+      ])
+    })
+    .then((value) {
+      CustomNotification customNotification = CustomNotification();
+      customNotification.sendNotification(
+          to: pushToken,
+          title: "Message from Andrew",
+          body: chat
+      );
+    })
+        .catchError((error) => false);
+  }
+
   // Send a chat to the respondent
-  Future<dynamic> sendChat({messageID, chat}) async {
+  Future<dynamic> sendChat({messageID, chat, pushToken}) async {
     CollectionReference messages = FirebaseFirestore.instance.collection(
         "messages");
 
@@ -41,7 +68,16 @@ class ChatManager {
         }
       ])
     })
-        .then((value) => true)
-        .catchError((error) => false);
+      .then((value) {
+          CustomNotification customNotification = CustomNotification();
+          customNotification.sendNotification(
+              to: pushToken,
+              title: "Message from Andrew",
+              body: chat
+          );
+    })
+      .catchError((error) => false);
   }
+
+
 }

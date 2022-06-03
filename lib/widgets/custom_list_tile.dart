@@ -11,6 +11,9 @@ class CustomListTile extends StatelessWidget {
   final bool? notif;
   String? currentUserID;
   String messageID;
+  String? respondentID;
+  bool? personalContact;
+  String? pushToken;
 
   CustomListTile({
     Key? key,
@@ -18,8 +21,11 @@ class CustomListTile extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.label,
+    this.pushToken,
     this.notif = false,
-    this.currentUserID
+    this.personalContact = false,
+    this.currentUserID,
+    this.respondentID
   }) : super(key: key);
 
   @override
@@ -79,7 +85,7 @@ class CustomListTile extends StatelessWidget {
                     });
                   },
                 ),
-                IconButton(
+                personalContact == true ? const SizedBox.shrink() : IconButton(
                   icon: const Icon(Icons.chat),
                   iconSize: 20.0,
                   color: kDefaultBackground,
@@ -88,8 +94,10 @@ class CustomListTile extends StatelessWidget {
                         .push(MaterialPageRoute(
                             builder: (_) => ChatScreen(
                                   respondentName: title,
-                                  sender: currentUserID!,
-                                  chatID: messageID,
+                                  senderID: currentUserID!,
+                                  messageID: messageID,
+                                  respondentID: respondentID!,
+                                  pushToken: pushToken!
                                 )));
                   },
                 ),

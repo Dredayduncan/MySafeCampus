@@ -1,5 +1,6 @@
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:my_safe_campus/constants.dart';
@@ -10,17 +11,22 @@ import 'package:my_safe_campus/widgets/custom_appbar.dart';
 import 'package:my_safe_campus/widgets/custom_textfield.dart';
 
 import '../model/chat_model.dart';
+import '../widgets/notification.dart';
 
 class ChatScreen extends StatefulWidget {
-  final String chatID;
-  final String sender;
+  final String messageID;
+  final String senderID;
   final String respondentName;
+  final String respondentID;
+  final String pushToken;
 
   const ChatScreen(
       {Key? key,
-      required this.chatID,
-      required this.sender,
-      required this.respondentName})
+      required this.messageID,
+      required this.senderID,
+      required this.respondentName,
+      required this.respondentID,
+      required this.pushToken})
       : super(key: key);
 
   @override
@@ -32,10 +38,17 @@ class _ChatScreenState extends State<ChatScreen> {
   // Initialise the chat manager
   late ChatManager chatManager;
 
+  // Initialise a variable to check if a conversation is new or not
+  bool newChat = false;
+
+  late CustomNotification _notification;
+
   @override
   void initState() {
     super.initState();
-    chatManager = ChatManager(userID: widget.sender);
+    chatManager = ChatManager(userID: widget.senderID);
+    _notification = CustomNotification();
+    print(widget.messageID);
   }
 
   @override
@@ -74,13 +87,24 @@ class _ChatScreenState extends State<ChatScreen> {
                       onPressed: () {
                         if (_chatController.text.isEmpty) {
                           return;
+                        } else if (newChat) {
+                          chatManager.startConversation(
+                              messageID: widget.messageID,
+                              chat: _chatController.text,
+                              recipientID: widget.respondentID,
+                              pushToken: widget.pushToken);
+
+                          setState(() {
+                            newChat = false;
+                          });
                         } else {
                           chatManager.sendChat(
-                            messageID: widget.chatID,
-                            chat: _chatController.text,
-                          );
-                          _chatController.clear();
+                              messageID: widget.messageID,
+                              chat: _chatController.text,
+                              pushToken: widget.pushToken);
                         }
+
+                        _chatController.clear();
                       },
                       icon: const Icon(
                         Icons.send,
@@ -96,7 +120,7 @@ class _ChatScreenState extends State<ChatScreen> {
       body: SingleChildScrollView(
         reverse: true,
         child: StreamBuilder<DocumentSnapshot>(
-          stream: chatManager.getChatStream(messageID: widget.chatID),
+          stream: chatManager.getChatStream(messageID: widget.messageID),
           builder:
               (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             //Check if an error occurred
@@ -113,12 +137,17 @@ class _ChatScreenState extends State<ChatScreen> {
               );
             }
 
-            if (snapshot.data == null) {
+            // Check if there has been no conversation between them
+            if (!snapshot.data!.exists) {
+              // indicate that the chat is new
+              newChat = true;
+
               return const Center(child: Text("Say Something."));
             }
 
             // Get the chats between the user and the respondent
             var doc = snapshot.data as DocumentSnapshot;
+
             List chats = doc['chat'];
 
             return Column(
@@ -135,7 +164,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       itemCount: chats.length,
                       itemBuilder: ((context, index) {
                         // final Chat chat = chats[index];
-                        bool isMe = chats[index]["sender"].id == widget.sender;
+                        bool isMe =
+                            chats[index]["sender"].id == widget.senderID;
+
                         return _buildMessage(chats[index], isMe);
                       }),
                     ),
