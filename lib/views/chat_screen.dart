@@ -20,14 +20,14 @@ class ChatScreen extends StatefulWidget {
   final String respondentID;
   final String pushToken;
 
-  const ChatScreen({
-    Key? key,
-    required this.messageID,
-    required this.senderID,
-    required this.respondentName,
-    required this.respondentID,
-    required this.pushToken
-  }) : super(key: key);
+  const ChatScreen(
+      {Key? key,
+      required this.messageID,
+      required this.senderID,
+      required this.respondentName,
+      required this.respondentID,
+      required this.pushToken})
+      : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -48,6 +48,7 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     chatManager = ChatManager(userID: widget.senderID);
     _notification = CustomNotification();
+    print(widget.messageID);
   }
 
   @override
@@ -86,25 +87,21 @@ class _ChatScreenState extends State<ChatScreen> {
                       onPressed: () {
                         if (_chatController.text.isEmpty) {
                           return;
-                        }
-                        else if (newChat){
+                        } else if (newChat) {
                           chatManager.startConversation(
-                            messageID: widget.messageID,
-                            chat: _chatController.text,
-                            recipientID: widget.respondentID,
-                            pushToken: widget.pushToken
-                          );
+                              messageID: widget.messageID,
+                              chat: _chatController.text,
+                              recipientID: widget.respondentID,
+                              pushToken: widget.pushToken);
 
                           setState(() {
                             newChat = false;
                           });
-                        }
-                        else {
+                        } else {
                           chatManager.sendChat(
-                            messageID: widget.messageID,
-                            chat: _chatController.text,
-                            pushToken: widget.pushToken
-                          );
+                              messageID: widget.messageID,
+                              chat: _chatController.text,
+                              pushToken: widget.pushToken);
                         }
 
                         _chatController.clear();
@@ -167,7 +164,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       itemCount: chats.length,
                       itemBuilder: ((context, index) {
                         // final Chat chat = chats[index];
-                        bool isMe = chats[index]["sender"].id == widget.senderID;
+                        bool isMe =
+                            chats[index]["sender"].id == widget.senderID;
 
                         return _buildMessage(chats[index], isMe);
                       }),

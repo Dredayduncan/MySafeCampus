@@ -25,7 +25,6 @@ class EmergencyServices extends StatefulWidget {
 }
 
 class _EmergencyServicesState extends State<EmergencyServices> {
-
   late EmergencyContacts contacts;
   late List emergencyServices;
   Widget _emergencyServicePage = const Center(
@@ -52,7 +51,8 @@ class _EmergencyServicesState extends State<EmergencyServices> {
         onPressed: () async {
           try {
             final contact = await FlutterContactPicker.pickPhoneContact();
-            await contacts.addEmergencyContact(name: contact.fullName!, contact: contact.phoneNumber!.number!);
+            await contacts.addEmergencyContact(
+                name: contact.fullName!, contact: contact.phoneNumber!.number!);
           } on UserCancelledPickingException catch (e) {
             if (e == 'CANCELLED') {
               return;
@@ -87,6 +87,7 @@ class _EmergencyServicesState extends State<EmergencyServices> {
                 Tab(
                   child: CustomTabLabel(
                       label: widget.isEmergencyContact == true ? "Users" : "Personal"),
+
                 ),
               ],
             ),
@@ -153,7 +154,6 @@ class _EmergencyServicesState extends State<EmergencyServices> {
                 ],
               ),
             ),
-
           ],
         ),
       ),
