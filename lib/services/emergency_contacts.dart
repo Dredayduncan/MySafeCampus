@@ -31,7 +31,7 @@ class EmergencyContacts {
   }
 
   // Get the user's timeline
-  Future<List> getEmergencyContacts() async {
+  Future<List> getEmergencyContacts({required isEmergencyContact}) async {
     List emergencyContacts = [];
 
     //Get all the ids of the emergency contacts
@@ -47,7 +47,9 @@ class EmergencyContacts {
               title: contactInfo!["name"],
               label: "FR",
               subtitle: contactInfo["contact"],
-              messageID: currentUserID + contactInfo["id"],
+              messageID: isEmergencyContact == false
+                  ? currentUserID + contactInfo["id"]
+                  : contactInfo["id"] + currentUserID,
               respondentID: contactInfo["id"],
               pushToken: contactInfo["pushToken"]
         ),
@@ -96,4 +98,7 @@ class EmergencyContacts {
 
     return data;
   }
+
+  // Method to retrieve the user's that have messaged the emergency Contact
+  Future<List> getChatList({required isEmergencyContact}) async {return [];}
 }

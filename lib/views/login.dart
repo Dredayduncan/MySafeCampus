@@ -162,9 +162,11 @@ class _LoginState extends State<Login> {
                                   //   );
                                   // });
 
+                                  bool isEmergencyContact = await auth.isEmergencyContact();
+
                                   return Navigator.of(context, rootNavigator: true).pushReplacement(
                                     MaterialPageRoute(
-                                      builder: (context) => CustomBottomNavigation(auth: auth,)
+                                      builder: (context) => CustomBottomNavigation(auth: auth, isEmergencyContact: isEmergencyContact,)
                                     )
                                   );
                                 });

@@ -46,6 +46,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,11 +108,11 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 150,
               child: ElevatedButton(
                 onPressed: () {
-                  _sendSMS();
-                  // _notification.showNotificationToUser(
-                  //   title: "Alert Sent!",
-                  //   body: "Emergency contacts have received your alert"
-                  // );
+                  // _sendSMS();
+                  _notification.showNotificationToUser(
+                    title: "Alert Sent!",
+                    body: "Emergency contacts have received your alert"
+                  );
                 },
                 style: ButtonStyle(
                   backgroundColor:

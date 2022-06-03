@@ -37,6 +37,18 @@ class Auth {
         .catchError((error) => false);
   }
 
+  // Check if the user is an emergency contact
+  Future<bool> isEmergencyContact() async{
+    DocumentReference user = FirebaseFirestore.instance.collection('users').doc(currentUser!.uid);
+    var emergencyContacts = await FirebaseFirestore.instance
+      .collection("emergencyContacts")
+      .where('contactID', isEqualTo: user)
+    .get();
+
+    return emergencyContacts.size == 0 ? false : true;
+
+  }
+
 
   // // Sign up with email and password
   // Future<User?>createUserWithEmailAndPassword({required String email, required password, required username, required contact}) async {
