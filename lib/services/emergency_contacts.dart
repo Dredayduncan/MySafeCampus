@@ -107,15 +107,16 @@ class EmergencyContacts {
     CollectionReference emergencyContacts = FirebaseFirestore.instance.collection("emergencyContacts");
 
     return await emergencyContacts
-      .where('contactID', isEqualTo: emergencyContactID)
+      .where('contactID', isEqualTo: FirebaseFirestore.instance.collection('users').doc(emergencyContactID))
       .get()
       .then((value) async {
 
       // Retrieve the list of users the emergency contact has conversations with
       List userChats = value.docs;
+      List conversations = userChats[0].data()['conversations'];
 
       // check if there are no conversations
-      if (userChats.isEmpty){
+      if (conversations.isEmpty){
         return [];
       }
 
@@ -124,8 +125,8 @@ class EmergencyContacts {
       /* Loop through the ids of the users with conversations and add them to
       the list
        */
-      for (var id in userChats){
-        var contactInfo = await getContactInfo(uid: id);
+      for (var id in conversations){
+        var contactInfo = await getContactInfo(uid: id['userID']);
         users.add(
             Padding(
               padding: const EdgeInsets.only(top: 12.0),

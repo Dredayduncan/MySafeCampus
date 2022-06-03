@@ -96,13 +96,6 @@ class _EmergencyServicesState extends State<EmergencyServices> {
                 child: TabBarView(
                   children: [
                     _emergencyServicePage,
-                    // ListView.builder(
-                    //   shrinkWrap: true,
-                    //   itemCount: emergencyServices.length,
-                    //   itemBuilder: (BuildContext context, int index) {
-                    //     return emergencyServices[index];
-                    //   },
-                    // ),
                     StreamBuilder<DocumentSnapshot>(
                       stream: contacts.getUserEmergencyContacts(),
                       builder: (BuildContext context,
