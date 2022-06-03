@@ -25,7 +25,6 @@ class EmergencyServices extends StatefulWidget {
 }
 
 class _EmergencyServicesState extends State<EmergencyServices> {
-
   late EmergencyContacts contacts;
   late List emergencyServices;
   Widget _emergencyServicePage = const Center(
@@ -39,7 +38,6 @@ class _EmergencyServicesState extends State<EmergencyServices> {
     super.initState();
     contacts = EmergencyContacts(currentUserID: widget.auth.currentUser!.uid);
     generateEmergencyContacts();
-
   }
 
   @override
@@ -154,13 +152,12 @@ class _EmergencyServicesState extends State<EmergencyServices> {
                         }
                       },
                     )
-                  ],
-                ),
-              ),
-
-            ],
-          ),
-        ),
+                  ]
+                )
+              )
+            ]
+          )
+        )
     );
   }
 
