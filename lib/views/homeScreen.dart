@@ -7,6 +7,7 @@ import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ic.dart';
 import '../widgets/custom_appbar.dart';
 import '../widgets/notification.dart';
+import 'package:telephony/telephony.dart';
 
 class HomeScreen extends StatefulWidget {
   final Auth? auth;
@@ -18,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late CustomNotification _notification;
+  final telephony = Telephony.instance;
 
   _HomeScreenState(){
 
@@ -43,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // }
     );
   }
+
 
 
   @override
@@ -105,6 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 150,
               child: ElevatedButton(
                 onPressed: () {
+                  // _sendSMS();
                   _notification.showNotificationToUser(
                     title: "Alert Sent!",
                     body: "Emergency contacts have received your alert"
@@ -130,5 +134,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  // Send SMS when the emergency button is clicked
+  _sendSMS() async {
+    telephony.sendSms(to: "0206742892", message: "hello");
   }
 }

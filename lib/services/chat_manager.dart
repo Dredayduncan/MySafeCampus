@@ -32,6 +32,9 @@ class ChatManager {
     CollectionReference messages = FirebaseFirestore.instance.collection(
         "messages");
 
+    // Add the user to the list of users that the emergency contact has chat with
+
+
     return messages.doc(messageID).set({
       "sender": FirebaseFirestore.instance.collection('users').doc(userID),
       "recipient": FirebaseFirestore.instance.collection('users').doc(recipientID),
@@ -44,6 +47,7 @@ class ChatManager {
       ])
     })
     .then((value) {
+      addUserToContactConversationList(emergencyContactID: recipientID);
       CustomNotification customNotification = CustomNotification();
       customNotification.sendNotification(
           to: pushToken,
@@ -78,6 +82,36 @@ class ChatManager {
     })
       .catchError((error) => false);
   }
+
+  // Add the user to the link of conversations an emergency contact has
+  Future<dynamic> addUserToContactConversationList({emergencyContactID}) async {
+    // Get the document id of the emergency contact
+    DocumentReference emergencyContact = FirebaseFirestore.instance.collection('users').doc(emergencyContactID);
+
+    // Get all the emergency contacts
+    CollectionReference emergencyContacts = FirebaseFirestore.instance.collection("emergencyContacts");
+
+    /* Get the ID of the document in the emergency services table that belongs
+     to the emergency contact
+     */
+    return await emergencyContacts
+      .where('contactID', isEqualTo: emergencyContact)
+      .get()
+      .then((value) {
+
+        // Add the user to the list of users that the emergency contact has conversations with
+        return emergencyContacts.doc(value.docs[0].id).update({
+          "conversations": FieldValue.arrayUnion([
+            {
+              "userID": userID,
+            }
+          ])
+        })
+            .then((value) => true)
+            .catchError((error) => false);
+      });
+  }
+
 
 
 }

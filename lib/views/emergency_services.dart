@@ -12,7 +12,13 @@ import '../widgets/custom_tab_label.dart';
 
 class EmergencyServices extends StatefulWidget {
   final Auth auth;
-  const EmergencyServices({Key? key, required this.auth}) : super(key: key);
+  bool isEmergencyContact;
+
+  EmergencyServices({
+    Key? key,
+    required this.auth,
+    this.isEmergencyContact = false
+  }) : super(key: key);
 
   @override
   State<EmergencyServices> createState() => _EmergencyServicesState();
@@ -21,12 +27,18 @@ class EmergencyServices extends StatefulWidget {
 class _EmergencyServicesState extends State<EmergencyServices> {
   late EmergencyContacts contacts;
   late List emergencyServices;
+  Widget _emergencyServicePage = const Center(
+    child:  CircularProgressIndicator(
+      color: kDefaultBackground,
+    ),
+  );
 
   @override
   void initState() {
     super.initState();
     contacts = EmergencyContacts(currentUserID: widget.auth.currentUser!.uid);
     generateEmergencyContacts();
+
   }
 
   @override
@@ -56,36 +68,40 @@ class _EmergencyServicesState extends State<EmergencyServices> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const TabBar(
-              labelColor: Color(0xFF1E1E1E),
-              labelStyle: TextStyle(fontFamily: 'Quattrocentro'),
-              indicator: BoxDecoration(
+            TabBar(
+              labelColor: const Color(0xFF1E1E1E),
+              labelStyle: const TextStyle(fontFamily: 'Quattrocentro'),
+              indicator: const BoxDecoration(
                 color: kDefaultBackground,
                 borderRadius: BorderRadius.all(
                   Radius.circular(5),
                 ),
               ),
               indicatorWeight: 2,
-              indicatorPadding: EdgeInsets.only(top: 40),
+              indicatorPadding: const EdgeInsets.only(top: 40),
               tabs: [
-                Tab(
-                  child: CustomTabLabel(label: "Ashesi"),
+                const Tab(
+                  child: CustomTabLabel(
+                      label: "Ashesi"),
                 ),
                 Tab(
-                  child: CustomTabLabel(label: "Personal"),
+                  child: CustomTabLabel(
+                      label: widget.isEmergencyContact == true ? "Users" : "Personal"),
+
                 ),
               ],
             ),
             Expanded(
               child: TabBarView(
                 children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: emergencyServices.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return emergencyServices[index];
-                    },
-                  ),
+                  _emergencyServicePage,
+                  // ListView.builder(
+                  //   shrinkWrap: true,
+                  //   itemCount: emergencyServices.length,
+                  //   itemBuilder: (BuildContext context, int index) {
+                  //     return emergencyServices[index];
+                  //   },
+                  // ),
                   StreamBuilder<DocumentSnapshot>(
                     stream: contacts.getUserEmergencyContacts(),
                     builder: (BuildContext context,
@@ -145,7 +161,16 @@ class _EmergencyServicesState extends State<EmergencyServices> {
   }
 
   generateEmergencyContacts() async {
-    emergencyServices = await contacts.getEmergencyContacts();
-    setState(() {});
+    emergencyServices = await contacts.getEmergencyContacts(isEmergencyContact: widget.isEmergencyContact);
+    setState(() {
+      _emergencyServicePage = ListView.builder(
+        shrinkWrap: true,
+        itemCount: emergencyServices.length,
+        itemBuilder: (BuildContext context, int index) {
+          return emergencyServices[index];
+        },
+      );
+    });
+
   }
 }

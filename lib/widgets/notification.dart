@@ -28,16 +28,15 @@ class CustomNotification{
   // The function responsible for sending push notifications
   Future showNotification({
     int id = 0,
-    // required String title,
-    // required String body,
     required RemoteNotification remoteNotification
-  }) async =>
+  }) async {
     notifications.show(
       id,
       remoteNotification.title,
       remoteNotification.body,
-      await _notificationDetails(), //Await because this is an async function
-  );
+      await _notificationDetails()
+    );
+  }//Await because this is an async function
 
   // The function responsible for sending local notifications
   Future showNotificationToUser({
