@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
     SmsSender sender = SmsSender();
 
     // Get the emergency contacts to send to
-    String address = "0206742892";
+    String address = "0206742892, 0202220086";
 
     // Create the alert message
     SmsMessage message = SmsMessage(address, 'Hello flutter world!');

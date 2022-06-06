@@ -172,7 +172,29 @@ class _ReportState extends State<Report> {
                                 padding:
                                     const EdgeInsets.fromLTRB(0, 20, 0, 10),
                                 child: CustomButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                      AlertDialog(
+                                        title: const Text('Error'),
+                                        content: const Text(
+                                            'Are you sure you want to submit this form?'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context, 'Cancel'),
+                                            child: const Text('Cancel'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context, 'Yes'),
+                                            child: const Text('Yes'),
+                                          ),
+                                        ],
+                                      )
+                                    );
+                                  },
                                   btnName: 'Submit Report',
                                 ),
                               )
