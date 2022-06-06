@@ -41,21 +41,18 @@ class EmergencyContacts {
     for (var id in ids) {
       var contactInfo = await getContactInfo(uid: id);
 
-      emergencyContacts.add(
-          Padding(
-            padding: const EdgeInsets.only(top: 12.0),
-            child: CustomListTile(
-              currentUserID: currentUserID,
-              title: contactInfo!["name"],
-              label: "FR",
-              subtitle: contactInfo["contact"],
-              messageID: isEmergencyContact == false
-                  ? currentUserID + contactInfo["id"]
-                  : contactInfo["id"] + currentUserID,
-              respondentID: contactInfo["id"],
-              pushToken: contactInfo["pushToken"]
-
-        ),
+      emergencyContacts.add(Padding(
+        padding: const EdgeInsets.only(top: 12.0),
+        child: CustomListTile(
+            currentUserID: currentUserID,
+            title: contactInfo!["name"],
+            label: "FR",
+            subtitle: contactInfo["contact"],
+            messageID: isEmergencyContact == false
+                ? currentUserID + contactInfo["id"]
+                : contactInfo["id"] + currentUserID,
+            respondentID: contactInfo["id"],
+            pushToken: contactInfo["pushToken"]),
       ));
     }
     return emergencyContacts;
@@ -101,5 +98,7 @@ class EmergencyContacts {
   }
 
   // Method to retrieve the user's that have messaged the emergency Contact
-  Future<List> getChatList({required isEmergencyContact}) async {return [];}
+  Future<List> getChatList({required isEmergencyContact}) async {
+    return [];
+  }
 }
