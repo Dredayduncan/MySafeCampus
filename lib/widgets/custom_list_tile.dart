@@ -91,14 +91,16 @@ class CustomListTile extends StatelessWidget {
                   color: kDefaultBackground,
                   onPressed: () {
                     Navigator.of(context, rootNavigator: true)
-                        .push(MaterialPageRoute(
-                            builder: (_) => ChatScreen(
-                                  respondentName: title,
-                                  senderID: currentUserID!,
-                                  messageID: messageID,
-                                  respondentID: respondentID!,
-                                  pushToken: pushToken!
-                                )));
+                      .push(MaterialPageRoute(
+                        builder: (_) => ChatScreen(
+                          respondentName: title,
+                          senderID: currentUserID!,
+                          messageID: messageID,
+                          respondentID: respondentID!,
+                          pushToken: pushToken!
+                        )
+                      )
+                    );
                   },
                 ),
               ],

@@ -44,8 +44,7 @@ class MyApp extends StatelessWidget {
 
     CustomNotification customNotification = CustomNotification();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      // RemoteNotification notification = message.notification!;
-      // AndroidNotification android = message.notification!.android!;
+
       if (message.notification != null) {
         customNotification.showNotification(
           remoteNotification: message.notification!

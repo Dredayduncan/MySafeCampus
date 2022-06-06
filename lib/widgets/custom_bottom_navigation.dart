@@ -12,7 +12,13 @@ import 'package:my_safe_campus/services/auth.dart';
 
 class CustomBottomNavigation extends StatefulWidget {
   final Auth auth;
-  const CustomBottomNavigation({Key? key, required this.auth}) : super(key: key);
+  bool isEmergencyContact;
+
+  CustomBottomNavigation({
+    Key? key,
+    required this.auth,
+    this.isEmergencyContact = false
+  }) : super(key: key);
 
   @override
   State<CustomBottomNavigation> createState() => _CustomBottomNavigationState();
@@ -32,7 +38,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
       HomeScreen(auth: widget.auth),
       const Articles(),
       Report(auth: widget.auth,),
-      EmergencyServices(auth: widget.auth),
+      EmergencyServices(auth: widget.auth, isEmergencyContact: widget.isEmergencyContact),
       History(auth: widget.auth),
       // const ProfilePage(),
     ];

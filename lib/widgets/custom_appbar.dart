@@ -3,11 +3,13 @@ import '../constants.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String? title;
+  final String? extraInfo;
   final bool? showNotif;
 
   const CustomAppBar({
     Key? key,
     this.title,
+    this.extraInfo,
     this.showNotif = false,
   }) : super(key: key);
 
@@ -26,9 +28,25 @@ class _CustomAppBarState extends State<CustomAppBar> {
       backgroundColor: kAccentColor,
       elevation: 0,
       // automaticallyImplyLeading: false,
-      title: Text(
-        widget.title != null ? widget.title! : '',
-        style: const TextStyle(fontFamily: 'Poppins'),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            widget.title != null ? widget.title! : '',
+            style: const TextStyle(fontFamily: 'Poppins'),
+          ),
+          widget.extraInfo != null
+              ? Text(
+                  widget.extraInfo!,
+                  style: const TextStyle(
+                    color: kLightTextColor,
+                    fontSize: 14,
+                  ),
+                )
+              : const SizedBox(
+                  width: 0,
+                ),
+        ],
       ),
       centerTitle: false,
       actions: [

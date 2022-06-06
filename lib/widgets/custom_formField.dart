@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../constants.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomFormField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final IconData? icon;
@@ -13,7 +13,7 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final bool borderless;
 
-  const CustomTextField({
+  const CustomFormField({
     Key? key,
     required this.controller,
     required this.hintText,
@@ -39,18 +39,7 @@ class CustomTextField extends StatelessWidget {
         hintStyle: const TextStyle(
           color: Colors.grey,
           fontWeight: FontWeight.w600,
-        ),
-        prefixIcon: Icon(
-          icon,
-          color: Colors.grey,
-        ),
-        suffixIcon: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            suffixIcon ?? const SizedBox(width: 0),
-            sendMsg ?? const SizedBox(width: 0),
-          ],
+          fontSize: 14,
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
