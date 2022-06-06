@@ -25,8 +25,9 @@ class _HistoryState extends State<History> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const CustomAppBar(
+        appBar: CustomAppBar(
           title: "History",
+          auth: widget.auth,
         ),
         body: DefaultTabController(
           length: 3,

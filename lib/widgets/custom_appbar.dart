@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import '../constants.dart';
+import '../services/auth.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String? title;
   final String? extraInfo;
   final bool? showNotif;
+  final Auth? auth;
 
   const CustomAppBar({
     Key? key,
     this.title,
     this.extraInfo,
     this.showNotif = true,
+    this.auth
   }) : super(key: key);
 
   @override
@@ -58,7 +61,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     Navigator.of(context, rootNavigator: true)
                         .pushNamed('/notifications');
                   },
-                  child: Icon(
+                  child: const Icon(
                     Icons.notifications_rounded,
                   ))
               : const SizedBox(

@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:my_safe_campus/views/login.dart';
 import 'package:my_safe_campus/widgets/custom_appbar.dart';
 import 'package:my_safe_campus/widgets/custom_list_tile.dart';
+import '../services/auth.dart';
 
 class NotificationScreen extends StatefulWidget {
-  const NotificationScreen({Key? key}) : super(key: key);
+  Auth? auth;
+
+  NotificationScreen({
+    Key? key,
+    this.auth
+  }) : super(key: key);
 
   @override
   State<NotificationScreen> createState() => _NotificationScreenState();
@@ -13,7 +20,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         title: 'Profile',
         showNotif: false,
       ),
@@ -24,12 +31,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ListTile(
               minLeadingWidth: 10,
               leading: const Icon(Icons.logout),
-              title: Text(
+              title: const Text(
                 'Logout',
               ),
-              // onTap: () {
-              //   uid != null ? Navigator.of(context, rootNavigator: true).pushNamed('/login') : ;
-              // },
               onTap: () {
                 showDialog(
                   context: context,
@@ -45,7 +49,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       ),
                       TextButton(
                         onPressed: () async {
-                          Navigator.pop(context);
+                          widget.auth!.signOut().then(
+                            (value) => Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => const Login()
+                              )
+                            )
+                          );
                         },
                         child: const Text('Logout'),
                       )
