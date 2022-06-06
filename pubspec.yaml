@@ -52,7 +52,7 @@ dependencies:
   font_awesome_flutter: ^10.1.0
   chat_bubbles: ^1.2.0
   fluttercontactpicker: ^4.7.0
-  telephony: ^0.2.0
+  sms_advanced: ^1.0.1
 
 dev_dependencies:
   flutter_test:
