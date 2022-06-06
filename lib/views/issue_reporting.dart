@@ -26,6 +26,18 @@ class _ReportState extends State<Report> {
 
   bool? chkvalue = false;
 
+  // Initial Selected Value
+  String dropdownvalue = 'Item 1';
+
+  // List of items in our dropdown menu
+  var items = [
+    'Item 1',
+    'Item 2',
+    'Item 3',
+    'Item 4',
+    'Item 5',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,23 +64,7 @@ class _ReportState extends State<Report> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // // Container(
-                      // //   width: 25,
-                      // //   height: 25,
-                      // //   decoration: BoxDecoration(
-                      // //     border: Border.all(),
-                      // //   ),
-                      // // ),
-                      // Checkbox(
-                      //   value: chkvalue,
-                      //   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      //   onChanged: (val) {
-                      //     setState(() {
-                      //       chkvalue = val;
-                      //     });
-                      //   },
-                      // ),
-                      Expanded(
+                      Flexible(
                         child: Padding(
                           padding: const EdgeInsets.only(
                             top: 20.0,
@@ -129,44 +125,28 @@ class _ReportState extends State<Report> {
                               const Text(
                                 '4. Please state your full name in the field below.',
                               ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              CustomFormField(
-                                controller: _ctrl1,
-                                hintText: 'hintText',
-                                onChanged: (value) {},
-                                validator: (value) {},
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              const Text(
-                                '5. Please state your full name in the field below.',
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              CustomFormField(
-                                controller: _ctrl1,
-                                hintText: 'hintText',
-                                onChanged: (value) {},
-                                validator: (value) {},
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              const Text(
-                                '6. Please state your full name in the field below.',
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              CustomFormField(
-                                controller: _ctrl1,
-                                hintText: 'hintText',
-                                onChanged: (value) {},
-                                validator: (value) {},
+                              DropdownButton(
+                                // Initial Value
+                                value: dropdownvalue,
+                                isExpanded: true,
+
+                                // Down Arrow Icon
+                                icon: const Icon(Icons.keyboard_arrow_down),
+
+                                // Array list of items
+                                items: items.map((String items) {
+                                  return DropdownMenuItem(
+                                    value: items,
+                                    child: Text(items),
+                                  );
+                                }).toList(),
+                                // After selecting the desired option,it will
+                                // change button value to selected value
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    dropdownvalue = newValue!;
+                                  });
+                                },
                               ),
                               Padding(
                                 padding:
@@ -174,26 +154,27 @@ class _ReportState extends State<Report> {
                                 child: CustomButton(
                                   onPressed: () {
                                     showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                      AlertDialog(
-                                        title: const Text('Error'),
-                                        content: const Text(
-                                            'Are you sure you want to submit this form?'),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context, 'Cancel'),
-                                            child: const Text('Cancel'),
-                                          ),
-                                          TextButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context, 'Yes'),
-                                            child: const Text('Yes'),
-                                          ),
-                                        ],
-                                      )
-                                    );
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            AlertDialog(
+                                              title: const Text('Error'),
+                                              content: const Text(
+                                                  'Are you sure you want to submit this form?'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          context, 'Cancel'),
+                                                  child: const Text('Cancel'),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          context, 'Yes'),
+                                                  child: const Text('Yes'),
+                                                ),
+                                              ],
+                                            ));
                                   },
                                   btnName: 'Submit Report',
                                 ),
@@ -262,4 +243,6 @@ class _ReportState extends State<Report> {
       ),
     );
   }
+
+  void _onChanged(Object? value) {}
 }

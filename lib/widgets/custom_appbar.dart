@@ -10,7 +10,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
     Key? key,
     this.title,
     this.extraInfo,
-    this.showNotif = false,
+    this.showNotif = true,
   }) : super(key: key);
 
   @override
@@ -51,16 +51,19 @@ class _CustomAppBarState extends State<CustomAppBar> {
       centerTitle: false,
       actions: [
         Padding(
-          padding: EdgeInsets.only(right: 20.0),
-          child: GestureDetector(
-            onTap: () {
-              Navigator.of(context, rootNavigator: true)
-                  .pushNamed('/notifications');
-            },
-            child: Icon(
-              Icons.notifications_rounded,
-            ),
-          ),
+          padding: const EdgeInsets.only(right: 20.0),
+          child: widget.showNotif == true
+              ? GestureDetector(
+                  onTap: () {
+                    Navigator.of(context, rootNavigator: true)
+                        .pushNamed('/notifications');
+                  },
+                  child: Icon(
+                    Icons.notifications_rounded,
+                  ))
+              : const SizedBox(
+                  width: 0,
+                ),
         )
       ],
     );
