@@ -7,7 +7,7 @@ import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ic.dart';
 import '../widgets/custom_appbar.dart';
 import '../widgets/notification.dart';
-import 'package:telephony/telephony.dart';
+import 'package:sms_advanced/sms_advanced.dart';
 
 class HomeScreen extends StatefulWidget {
   final Auth? auth;
@@ -19,14 +19,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late CustomNotification _notification;
-  final telephony = Telephony.instance;
 
   _HomeScreenState(){
 
-    //TO DO
-    /*Make a check for the user being an emergency service and assign
-    a push token so they can receive push notifications
-     */
     FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
     firebaseMessaging.requestPermission();
 
@@ -100,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          SizedBox(height: 90),
+          const SizedBox(height: 90),
           Align(
             alignment: Alignment.center,
             child: SizedBox(
@@ -108,11 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 150,
               child: ElevatedButton(
                 onPressed: () {
-                  // _sendSMS();
-                  _notification.showNotificationToUser(
-                    title: "Alert Sent!",
-                    body: "Emergency contacts have received your alert"
-                  );
+                  _sendSMS();
                 },
                 style: ButtonStyle(
                   backgroundColor:
@@ -138,6 +129,47 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Send SMS when the emergency button is clicked
   _sendSMS() async {
-    telephony.sendSms(to: "0206742892", message: "hello");
+    // Instantiate sender object
+    SmsSender sender = SmsSender();
+
+    // Get the emergency contacts to send to
+    String address = "0206742892";
+
+    // Create the alert message
+    SmsMessage message = SmsMessage(address, 'Hello flutter world!');
+
+    // Add a listener to check when the message has been sent or not
+    message.onStateChanged.listen((state) {
+      if (state == SmsMessageState.Sent) {
+        _notification.showNotificationToUser(
+            title: "Alert Sent!",
+            body: "Emergency contacts have received your alert"
+        );
+      } else if (state == SmsMessageState.Delivered) {
+        _notification.showNotificationToUser(
+            title: "Alert Sent!",
+            body: "Emergency contacts have received your alert"
+        );
+      }
+      else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) =>
+          AlertDialog(
+            title: const Text('Error'),
+            content: const Text(
+                'The alert message could not be sent. Please check if you have credit and try again.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () =>
+                    Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          )
+        );
+      }
+    });
+    sender.sendSms(message);
   }
 }
