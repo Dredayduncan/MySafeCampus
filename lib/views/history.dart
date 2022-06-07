@@ -159,18 +159,48 @@ class _HistoryState extends State<History> {
                             );
                           },
                         ),
-                        ListView.builder(
-                            itemCount: contacts.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Padding(
-                                  padding: const EdgeInsets.only(top: 12.0),
-                                  child: CustomHistoryTile(
-                                    title: contacts[index]["title"],
-                                    icon: Icons.insert_drive_file_sharp,
-                                    subtitle: contacts[index]["subtitle"],
-                                  )
+                        StreamBuilder<QuerySnapshot>(
+                          stream: historyManager.getUserReports(),
+                          builder:
+                              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                            //Check if an error occurred
+                            if (snapshot.hasError) {
+                              return const Text("Something went wrong");
+                            }
+
+                            // Check if the connection is still loading
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(
+                                  color: kDefaultBackground,
+                                ),
                               );
                             }
+
+                            // Check if there has been no conversation between them
+                            if (snapshot.data?.size == 0) {
+                              return const Center(child: Text("You have not made any calls."));
+                            }
+
+                            // Get the chats between the user and the respondent
+                            var doc = snapshot.data;
+
+                            List reports = doc!.docs;
+
+                            return ListView.builder(
+                                itemCount: reports.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Padding(
+                                      padding: const EdgeInsets.only(top: 12.0),
+                                      child: CustomHistoryTile(
+                                        title: reports[index]['formDetails']['offenceType'],
+                                        icon: Icons.insert_drive_file_sharp,
+                                        subtitle: reports[index]["status"],
+                                      )
+                                  );
+                                }
+                            );
+                          },
                         ),
                       ]
                   ),
