@@ -8,13 +8,9 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final bool? showNotif;
   final Auth? auth;
 
-  const CustomAppBar({
-    Key? key,
-    this.title,
-    this.extraInfo,
-    this.showNotif = true,
-    this.auth
-  }) : super(key: key);
+  const CustomAppBar(
+      {Key? key, this.title, this.extraInfo, this.showNotif = true, this.auth})
+      : super(key: key);
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -59,10 +55,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
               ? GestureDetector(
                   onTap: () {
                     Navigator.of(context, rootNavigator: true)
-                        .pushNamed('/notifications');
+                        .pushNamed('/profile');
                   },
                   child: const Icon(
-                    Icons.notifications_rounded,
+                    Icons.person,
                   ))
               : const SizedBox(
                   width: 0,

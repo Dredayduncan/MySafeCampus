@@ -3,7 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:my_safe_campus/services/auth.dart';
 import 'package:my_safe_campus/views/login.dart';
-import 'package:my_safe_campus/views/notifications_page.dart';
+import 'package:my_safe_campus/views/profile_page.dart';
 import 'package:my_safe_campus/widgets/custom_bottom_navigation.dart';
 import 'package:my_safe_campus/widgets/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -42,14 +42,11 @@ class MyApp extends StatelessWidget {
   // const MyApp({Key? key}) : super(key: key);
 
   MyApp({Key? key}) : super(key: key) {
-
     CustomNotification customNotification = CustomNotification();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-
       if (message.notification != null) {
         customNotification.showNotification(
-          remoteNotification: message.notification!
-        );
+            remoteNotification: message.notification!);
       }
     });
 
@@ -80,41 +77,42 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MySafe Campus',
-      initialRoute: initScreen == 0 || initScreen == null
-          ? '/onboard'
-          : null,
+      initialRoute: initScreen == 0 || initScreen == null ? '/onboard' : null,
       home: initScreen == 0 || initScreen == null
-        ? null
-        :  StreamBuilder<User?>(
-          stream: auth.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.active) {
-              final user = snapshot.data;
+          ? null
+          : StreamBuilder<User?>(
+              stream: auth.authStateChanges(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.active) {
+                  final user = snapshot.data;
 
-              //Check if the user has signed in
-              if (user == null) {
-                //Display the signIn page if the user has not logged in
-                return const Login();
-              }
+                  //Check if the user has signed in
+                  if (user == null) {
+                    //Display the signIn page if the user has not logged in
+                    return const Login();
+                  }
 
-              // Redirect the user to the main screen if they're logged in already
-              return CustomBottomNavigation(auth: auth);
-            }
+                  // Redirect the user to the main screen if they're logged in already
+                  return CustomBottomNavigation(auth: auth);
+                }
 
-            //Display a loading UI while the data is loading
-            return const Scaffold(
-              // backgroundColor: Colors.white,
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
-      ),
+                //Display a loading UI while the data is loading
+                return const Scaffold(
+                  // backgroundColor: Colors.white,
+                  body: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }),
       routes: {
         '/onboard': (context) => const Onboarding(),
         '/login': (context) => const Login(),
-        '/home': (context) => CustomBottomNavigation(auth: auth,),
-        '/notifications': (context) => NotificationScreen(auth: auth,),
+        '/home': (context) => CustomBottomNavigation(
+              auth: auth,
+            ),
+        '/profile': (context) => ProfileScreen(
+              auth: auth,
+            ),
       },
     );
   }

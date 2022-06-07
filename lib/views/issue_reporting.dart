@@ -27,15 +27,13 @@ class _ReportState extends State<Report> {
   bool? chkvalue = false;
 
   // Initial Selected Value
-  String dropdownvalue = 'Item 1';
+  String dropdownvalue = 'Cat calling';
 
   // List of items in our dropdown menu
   var items = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
+    'Cat calling',
+    'Rape',
+    'Groping',
   ];
 
   @override
@@ -80,7 +78,7 @@ class _ReportState extends State<Report> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               const Text(
-                                '1. Please state your full name in the field below.',
+                                '1. Please state the name of the perpetrator.',
                               ),
                               const SizedBox(
                                 height: 5,
@@ -95,13 +93,13 @@ class _ReportState extends State<Report> {
                                 height: 30,
                               ),
                               const Text(
-                                '2. Please state your full name in the field below.',
+                                '2. More information about perpetrator? (Class, Major, Gender)',
                               ),
                               const SizedBox(
                                 height: 5,
                               ),
                               CustomFormField(
-                                controller: _ctrl1,
+                                controller: _ctrl2,
                                 hintText: 'hintText',
                                 onChanged: (value) {},
                                 validator: (value) {},
@@ -110,22 +108,7 @@ class _ReportState extends State<Report> {
                                 height: 30,
                               ),
                               const Text(
-                                '3. Please state your full name in the field below.',
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              CustomFormField(
-                                controller: _ctrl1,
-                                hintText: 'hintText',
-                                onChanged: (value) {},
-                                validator: (value) {},
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              const Text(
-                                '4. Please state your full name in the field below.',
+                                '3. Please state the form of sexual misconduct',
                               ),
                               DropdownButton(
                                 // Initial Value
@@ -149,6 +132,39 @@ class _ReportState extends State<Report> {
                                     dropdownvalue = newValue!;
                                   });
                                 },
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              const Text(
+                                '4. Where did the issue occur?',
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              CustomFormField(
+                                controller: _ctrl3,
+                                hintText: 'hintText',
+                                onChanged: (value) {},
+                                validator: (value) {},
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              const Text(
+                                '5. Give a brief description of what happened.',
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              CustomFormField(
+                                controller: _ctrl4,
+                                hintText: 'hintText',
+                                onChanged: (value) {},
+                                validator: (value) {},
+                              ),
+                              const SizedBox(
+                                height: 30,
                               ),
                               Padding(
                                 padding:
