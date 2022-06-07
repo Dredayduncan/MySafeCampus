@@ -43,8 +43,9 @@ class _EmergencyServicesState extends State<EmergencyServices> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: "Emergency Services",
+        auth: widget.auth,
       ),
       floatingActionButton: widget.isEmergencyContact == true
         ? null

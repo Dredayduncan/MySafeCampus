@@ -41,9 +41,11 @@ class _ReportState extends State<Report> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-          title: "Issue Reporting",
-          extraInfo: 'To report an issue kindly fill the form below'),
+      appBar: CustomAppBar(
+        title: "Issue Reporting",
+        extraInfo: 'To report an issue kindly fill the form below',
+        auth: widget.auth,
+      ),
       body: SingleChildScrollView(
         // reverse: true,
         child: Column(
