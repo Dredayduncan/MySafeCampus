@@ -5,6 +5,7 @@ import 'package:my_safe_campus/services/auth.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ic.dart';
+import 'package:my_safe_campus/services/user_history.dart';
 import '../widgets/custom_appbar.dart';
 import '../widgets/notification.dart';
 import 'package:sms_advanced/sms_advanced.dart';
@@ -22,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _HomeScreenState(){
 
+    // Assign a push token to every user to be able to receive push notifications
     FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
     firebaseMessaging.requestPermission();
 
@@ -39,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
     //           builder: (context) => HomeScreen(auth: widget.auth)));
     // }
     );
+
   }
 
   @override
@@ -129,6 +132,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Send SMS when the emergency button is clicked
   _sendSMS() async {
+    // Instantiate user history object
+    UserHistory historyManager = UserHistory(userID: widget.auth!.currentUser!.uid);
+
     // Instantiate sender object
     SmsSender sender = SmsSender();
 
@@ -141,17 +147,20 @@ class _HomeScreenState extends State<HomeScreen> {
     // Add a listener to check when the message has been sent or not
     message.onStateChanged.listen((state) {
       if (state == SmsMessageState.Sent) {
+        historyManager.updateEmergencyButtonHits(status: "Sent");
         _notification.showNotificationToUser(
             title: "Alert Sent!",
             body: "Emergency contacts have received your alert"
         );
       } else if (state == SmsMessageState.Delivered) {
+        historyManager.updateEmergencyButtonHits(status: "Delivered");
         _notification.showNotificationToUser(
             title: "Alert Sent!",
             body: "Emergency contacts have received your alert"
         );
       }
       else {
+        historyManager.updateEmergencyButtonHits(status: "Failed");
         showDialog(
           context: context,
           builder: (BuildContext context) =>
