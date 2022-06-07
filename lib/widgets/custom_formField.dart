@@ -33,6 +33,7 @@ class CustomFormField extends StatelessWidget {
       onChanged: onChanged,
       validator: validator,
       obscureText: obscureText,
+      maxLines: null,
       style: const TextStyle(color: kDarkTextColor),
       decoration: InputDecoration(
         hintText: hintText,
