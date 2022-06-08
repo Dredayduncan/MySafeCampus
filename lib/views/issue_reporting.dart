@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_safe_campus/constants.dart';
+import 'package:my_safe_campus/services/user_history.dart';
 import 'package:my_safe_campus/widgets/custom_button.dart';
 import 'package:my_safe_campus/widgets/custom_textfield.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -17,10 +17,10 @@ class Report extends StatefulWidget {
 }
 
 class _ReportState extends State<Report> {
-  final TextEditingController _ctrl1 = TextEditingController();
-  final TextEditingController _ctrl2 = TextEditingController();
-  final TextEditingController _ctrl3 = TextEditingController();
-  final TextEditingController _ctrl4 = TextEditingController();
+  final TextEditingController perpetrator = TextEditingController();
+  final TextEditingController perpetratorInfo = TextEditingController();
+  final TextEditingController location = TextEditingController();
+  final TextEditingController description = TextEditingController();
   final TextEditingController _ctrl5 = TextEditingController();
   final TextEditingController _ctrl6 = TextEditingController();
 
@@ -38,6 +38,8 @@ class _ReportState extends State<Report> {
 
   @override
   Widget build(BuildContext context) {
+    UserHistory historyManager = UserHistory(userID: widget.auth.currentUser!.uid);
+
     return Scaffold(
       appBar: CustomAppBar(
         title: "Issue Reporting",
@@ -84,7 +86,7 @@ class _ReportState extends State<Report> {
                                 height: 5,
                               ),
                               CustomFormField(
-                                controller: _ctrl1,
+                                controller: perpetrator,
                                 hintText: 'hintText',
                                 onChanged: (value) {},
                                 validator: (value) {},
@@ -99,7 +101,7 @@ class _ReportState extends State<Report> {
                                 height: 5,
                               ),
                               CustomFormField(
-                                controller: _ctrl2,
+                                controller: perpetratorInfo,
                                 hintText: 'hintText',
                                 onChanged: (value) {},
                                 validator: (value) {},
@@ -143,7 +145,7 @@ class _ReportState extends State<Report> {
                                 height: 5,
                               ),
                               CustomFormField(
-                                controller: _ctrl3,
+                                controller: location,
                                 hintText: 'hintText',
                                 onChanged: (value) {},
                                 validator: (value) {},
@@ -158,7 +160,7 @@ class _ReportState extends State<Report> {
                                 height: 5,
                               ),
                               CustomFormField(
-                                controller: _ctrl4,
+                                controller: description,
                                 hintText: 'hintText',
                                 onChanged: (value) {},
                                 validator: (value) {},
@@ -186,9 +188,48 @@ class _ReportState extends State<Report> {
                                                   child: const Text('Cancel'),
                                                 ),
                                                 TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.pop(
-                                                          context, 'Yes'),
+                                                  onPressed: () {
+                                                    Map<String, String> formDetails = {
+                                                      "perpetrator": perpetrator.text,
+                                                      "perpetratorInfo": perpetratorInfo.text,
+                                                      "offenceType": dropdownvalue,
+                                                      "location": location.text,
+                                                      "description": description.text
+                                                    };
+
+                                                    historyManager.updateReports(formDetails: formDetails).then((value) {
+                                                      if (value == true){
+                                                        setState(() {
+                                                          perpetrator.clear();
+                                                          perpetratorInfo.clear();
+                                                          location.clear();
+                                                          description.clear();
+                                                        });
+
+                                                        // Remove the confirmation pop up
+                                                        Navigator.pop(
+                                                            context, 'Yes');
+
+                                                        // display the feedback pop up
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext context) =>
+                                                            AlertDialog(
+                                                              title: const Text('Error'),
+                                                              content: const Text(
+                                                                  'Your report has been sent!'),
+                                                              actions: <Widget>[
+                                                                TextButton(
+                                                                  onPressed: () =>
+                                                                      Navigator.pop(context, 'OK'),
+                                                                  child: const Text('OK'),
+                                                                ),
+                                                              ],
+                                                            )
+                                                        );
+                                                      }
+                                                    });
+                                                  },
                                                   child: const Text('Yes'),
                                                 ),
                                               ],

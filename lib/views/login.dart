@@ -152,16 +152,7 @@ class _LoginState extends State<Login> {
                                     const Duration(seconds: 2),
                                   );
 
-                                  // // set isLoading to false
-                                  // setState(() {
-                                  //   _isLoading = false;
-                                  //   Navigator.of(context, rootNavigator: true).push(
-                                  //     MaterialPageRoute(
-                                  //       builder: (context) => HomeScreen(auth: auth,)
-                                  //     )
-                                  //   );
-                                  // });
-
+                                  // Navigate to home page when the authentication is successful
                                   bool isEmergencyContact = await auth.isEmergencyContact();
 
                                   return Navigator.of(context, rootNavigator: true).pushReplacement(
