@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:my_safe_campus/services/user_history.dart';
 import 'package:my_safe_campus/widgets/custom_button.dart';
 import 'package:my_safe_campus/widgets/custom_textfield.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../services/auth.dart';
 import '../widgets/custom_appbar.dart';
 import '../widgets/custom_formField.dart';
@@ -27,13 +26,13 @@ class _ReportState extends State<Report> {
   bool? chkvalue = false;
 
   // Initial Selected Value
-  String dropdownvalue = 'Cat calling';
+  String dropdownvalue = 'Harassment';
 
   // List of items in our dropdown menu
   var items = [
-    'Cat calling',
+    'Harassment',
+    'Assault',
     'Rape',
-    'Groping',
   ];
 
   @override

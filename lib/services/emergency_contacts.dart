@@ -111,12 +111,13 @@ class EmergencyContacts {
 
       // Retrieve the list of users the emergency contact has conversations with
       List userChats = value.docs;
-      List conversations = userChats[0].data()['conversations'];
 
       // check if there are no conversations
-      if (conversations.isEmpty){
+      if (!userChats[0].data().containsKey("conversations")){
         return [];
       }
+
+      List conversations = userChats[0].data()['conversations'];
 
       List users = [];
 
