@@ -181,9 +181,11 @@ class _ReportState extends State<Report> {
                                                   'Are you sure you want to submit this form?'),
                                               actions: <Widget>[
                                                 TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.pop(
-                                                          context, 'Cancel'),
+                                                  onPressed: () {
+                                                    historyManager.updateCancelledReports();
+                                                    Navigator.pop(
+                                                        context, 'Cancel');
+                                                  },
                                                   child: const Text('Cancel'),
                                                 ),
                                                 TextButton(

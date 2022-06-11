@@ -73,5 +73,20 @@ class UserHistory {
         .catchError((error) => false);
   }
 
+  // Record when the emergency button was pressed and at what time
+  Future<dynamic> updateCancelledReports() async {
+    CollectionReference reports = FirebaseFirestore.instance.collection("reports");
+
+    return reports
+        .add({
+      "userID": FirebaseFirestore.instance.collection('users').doc(userID),
+      "timeCalled": DateTime.now(),
+      "status": "Cancelled",
+      "formDetails": {}
+    })
+        .then((value) => true)
+        .catchError((error) => false);
+  }
+
 
 }

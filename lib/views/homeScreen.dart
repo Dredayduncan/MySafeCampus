@@ -7,6 +7,7 @@ import 'package:my_safe_campus/services/auth.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ic.dart';
+import 'package:my_safe_campus/services/emergency_contacts.dart';
 import 'package:my_safe_campus/services/user_history.dart';
 import '../widgets/custom_appbar.dart';
 import '../widgets/notification.dart';
@@ -137,11 +138,15 @@ class _HomeScreenState extends State<HomeScreen> {
     // Instantiate user history object
     UserHistory historyManager = UserHistory(userID: widget.auth!.currentUser!.uid);
 
-    List<String> emergencyContacts = ["0206742892"];
+    EmergencyContacts emergency = EmergencyContacts(currentUserID: widget.auth!.currentUser!.uid);
+
+    Map<String, dynamic>? currentUser = await emergency.getContactInfo(uid: widget.auth!.currentUser!.uid);
+
+    List<String> emergencyContacts = await emergency.getEmergencyContactNumbers();
 
     Map data = {
-      "sender": "Andrew",
-      "message": "This is MySafeCampus Emergency Alert. I need help!",
+      "sender": currentUser!['name'].split(" ")[0],
+      "message": "This is MySafeCampus Emergency Alert from ${currentUser['name']}. I need help!",
       "recipients":
       emergencyContacts
     };
@@ -150,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
     var response = await http.post(
         url,
         headers: {
-          "api-key": "OnRvVmNOUDZ0aXg0Rk5Lcm4=",
+          "api-key": SMSAPIKEY,
           "Content-Type": "application/json",
         },
         body: jsonEncode(data)

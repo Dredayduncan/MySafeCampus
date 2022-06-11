@@ -31,6 +31,22 @@ class EmergencyContacts {
     });
   }
 
+  // Get the contact numbers of emergency contacts
+  Future<List<String>> getEmergencyContactNumbers() async {
+    List emergencyContactIDs = await getEmergencyContactIDs();
+
+    List<String> contacts = [];
+
+    for (var contactId in emergencyContactIDs){
+      var emergencyContact = await getContactInfo(uid: contactId);
+      contacts.add(
+        emergencyContact!['contact']
+      );
+    }
+
+    return contacts;
+  }
+
   // Get the user's timeline
   Future<List> getEmergencyContacts({required isEmergencyContact}) async {
     List emergencyContacts = [];
