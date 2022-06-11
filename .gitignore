@@ -48,4 +48,4 @@ app.*.map.json
 /ios/Runner/GoogleService-Info.plist
 
 # Credentials
-/lib/constants.dart
+lib/constants.dart
