@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_safe_campus/constants.dart';
+import 'package:my_safe_campus/services/user_history.dart';
 import 'package:my_safe_campus/widgets/custom_button.dart';
 import 'package:my_safe_campus/widgets/custom_textfield.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../services/auth.dart';
 import '../widgets/custom_appbar.dart';
 import '../widgets/custom_formField.dart';
@@ -17,21 +16,35 @@ class Report extends StatefulWidget {
 }
 
 class _ReportState extends State<Report> {
-  final TextEditingController _ctrl1 = TextEditingController();
-  final TextEditingController _ctrl2 = TextEditingController();
-  final TextEditingController _ctrl3 = TextEditingController();
-  final TextEditingController _ctrl4 = TextEditingController();
+  final TextEditingController perpetrator = TextEditingController();
+  final TextEditingController perpetratorInfo = TextEditingController();
+  final TextEditingController location = TextEditingController();
+  final TextEditingController description = TextEditingController();
   final TextEditingController _ctrl5 = TextEditingController();
   final TextEditingController _ctrl6 = TextEditingController();
 
   bool? chkvalue = false;
 
+  // Initial Selected Value
+  String dropdownvalue = 'Harassment';
+
+  // List of items in our dropdown menu
+  var items = [
+    'Harassment',
+    'Assault',
+    'Rape',
+  ];
+
   @override
   Widget build(BuildContext context) {
+    UserHistory historyManager = UserHistory(userID: widget.auth.currentUser!.uid);
+
     return Scaffold(
-      appBar: const CustomAppBar(
-          title: "Issue Reporting",
-          extraInfo: 'To report an issue kindly fill the form below'),
+      appBar: CustomAppBar(
+        title: "Issue Reporting",
+        extraInfo: 'To report an issue kindly fill the form below',
+        auth: widget.auth,
+      ),
       body: SingleChildScrollView(
         // reverse: true,
         child: Column(
@@ -52,23 +65,7 @@ class _ReportState extends State<Report> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // // Container(
-                      // //   width: 25,
-                      // //   height: 25,
-                      // //   decoration: BoxDecoration(
-                      // //     border: Border.all(),
-                      // //   ),
-                      // // ),
-                      // Checkbox(
-                      //   value: chkvalue,
-                      //   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      //   onChanged: (val) {
-                      //     setState(() {
-                      //       chkvalue = val;
-                      //     });
-                      //   },
-                      // ),
-                      Expanded(
+                      Flexible(
                         child: Padding(
                           padding: const EdgeInsets.only(
                             top: 20.0,
@@ -82,13 +79,13 @@ class _ReportState extends State<Report> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               const Text(
-                                '1. Please state your full name in the field below.',
+                                '1. Please state the name of the perpetrator.',
                               ),
                               const SizedBox(
                                 height: 5,
                               ),
                               CustomFormField(
-                                controller: _ctrl1,
+                                controller: perpetrator,
                                 hintText: 'hintText',
                                 onChanged: (value) {},
                                 validator: (value) {},
@@ -97,13 +94,13 @@ class _ReportState extends State<Report> {
                                 height: 30,
                               ),
                               const Text(
-                                '2. Please state your full name in the field below.',
+                                '2. More information about perpetrator? (Class, Major, Gender)',
                               ),
                               const SizedBox(
                                 height: 5,
                               ),
                               CustomFormField(
-                                controller: _ctrl1,
+                                controller: perpetratorInfo,
                                 hintText: 'hintText',
                                 onChanged: (value) {},
                                 validator: (value) {},
@@ -112,13 +109,42 @@ class _ReportState extends State<Report> {
                                 height: 30,
                               ),
                               const Text(
-                                '3. Please state your full name in the field below.',
+                                '3. Please state the form of sexual misconduct',
+                              ),
+                              DropdownButton(
+                                // Initial Value
+                                value: dropdownvalue,
+                                isExpanded: true,
+
+                                // Down Arrow Icon
+                                icon: const Icon(Icons.keyboard_arrow_down),
+
+                                // Array list of items
+                                items: items.map((String items) {
+                                  return DropdownMenuItem(
+                                    value: items,
+                                    child: Text(items),
+                                  );
+                                }).toList(),
+                                // After selecting the desired option,it will
+                                // change button value to selected value
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    dropdownvalue = newValue!;
+                                  });
+                                },
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              const Text(
+                                '4. Where did the issue occur?',
                               ),
                               const SizedBox(
                                 height: 5,
                               ),
                               CustomFormField(
-                                controller: _ctrl1,
+                                controller: location,
                                 hintText: 'hintText',
                                 onChanged: (value) {},
                                 validator: (value) {},
@@ -127,46 +153,19 @@ class _ReportState extends State<Report> {
                                 height: 30,
                               ),
                               const Text(
-                                '4. Please state your full name in the field below.',
+                                '5. Give a brief description of what happened.',
                               ),
                               const SizedBox(
                                 height: 5,
                               ),
                               CustomFormField(
-                                controller: _ctrl1,
+                                controller: description,
                                 hintText: 'hintText',
                                 onChanged: (value) {},
                                 validator: (value) {},
                               ),
                               const SizedBox(
                                 height: 30,
-                              ),
-                              const Text(
-                                '5. Please state your full name in the field below.',
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              CustomFormField(
-                                controller: _ctrl1,
-                                hintText: 'hintText',
-                                onChanged: (value) {},
-                                validator: (value) {},
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              const Text(
-                                '6. Please state your full name in the field below.',
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              CustomFormField(
-                                controller: _ctrl1,
-                                hintText: 'hintText',
-                                onChanged: (value) {},
-                                validator: (value) {},
                               ),
                               Padding(
                                 padding:
@@ -174,26 +173,68 @@ class _ReportState extends State<Report> {
                                 child: CustomButton(
                                   onPressed: () {
                                     showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                      AlertDialog(
-                                        title: const Text('Error'),
-                                        content: const Text(
-                                            'Are you sure you want to submit this form?'),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context, 'Cancel'),
-                                            child: const Text('Cancel'),
-                                          ),
-                                          TextButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context, 'Yes'),
-                                            child: const Text('Yes'),
-                                          ),
-                                        ],
-                                      )
-                                    );
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            AlertDialog(
+                                              title: const Text('Error'),
+                                              content: const Text(
+                                                  'Are you sure you want to submit this form?'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  onPressed: () {
+                                                    historyManager.updateCancelledReports();
+                                                    Navigator.pop(
+                                                        context, 'Cancel');
+                                                  },
+                                                  child: const Text('Cancel'),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Map<String, String> formDetails = {
+                                                      "perpetrator": perpetrator.text,
+                                                      "perpetratorInfo": perpetratorInfo.text,
+                                                      "offenceType": dropdownvalue,
+                                                      "location": location.text,
+                                                      "description": description.text
+                                                    };
+
+                                                    historyManager.updateReports(formDetails: formDetails).then((value) {
+                                                      if (value == true){
+                                                        setState(() {
+                                                          perpetrator.clear();
+                                                          perpetratorInfo.clear();
+                                                          location.clear();
+                                                          description.clear();
+                                                        });
+
+                                                        // Remove the confirmation pop up
+                                                        Navigator.pop(
+                                                            context, 'Yes');
+
+                                                        // display the feedback pop up
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext context) =>
+                                                            AlertDialog(
+                                                              title: const Text('Error'),
+                                                              content: const Text(
+                                                                  'Your report has been sent!'),
+                                                              actions: <Widget>[
+                                                                TextButton(
+                                                                  onPressed: () =>
+                                                                      Navigator.pop(context, 'OK'),
+                                                                  child: const Text('OK'),
+                                                                ),
+                                                              ],
+                                                            )
+                                                        );
+                                                      }
+                                                    });
+                                                  },
+                                                  child: const Text('Yes'),
+                                                ),
+                                              ],
+                                            ));
                                   },
                                   btnName: 'Submit Report',
                                 ),
@@ -262,4 +303,6 @@ class _ReportState extends State<Report> {
       ),
     );
   }
+
+  void _onChanged(Object? value) {}
 }

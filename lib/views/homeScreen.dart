@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:my_safe_campus/constants.dart';
@@ -5,9 +7,11 @@ import 'package:my_safe_campus/services/auth.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ic.dart';
+import 'package:my_safe_campus/services/emergency_contacts.dart';
+import 'package:my_safe_campus/services/user_history.dart';
 import '../widgets/custom_appbar.dart';
 import '../widgets/notification.dart';
-import 'package:sms_advanced/sms_advanced.dart';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   final Auth? auth;
@@ -22,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _HomeScreenState(){
 
+    // Assign a push token to every user to be able to receive push notifications
     FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
     firebaseMessaging.requestPermission();
 
@@ -39,14 +44,15 @@ class _HomeScreenState extends State<HomeScreen> {
     //           builder: (context) => HomeScreen(auth: widget.auth)));
     // }
     );
+
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: CustomAppBar(
+        auth: widget.auth,
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -129,47 +135,59 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Send SMS when the emergency button is clicked
   _sendSMS() async {
-    // Instantiate sender object
-    SmsSender sender = SmsSender();
+    // Instantiate user history object
+    UserHistory historyManager = UserHistory(userID: widget.auth!.currentUser!.uid);
 
-    // Get the emergency contacts to send to
-    String address = "0206742892, 0202220086";
+    EmergencyContacts emergency = EmergencyContacts(currentUserID: widget.auth!.currentUser!.uid);
 
-    // Create the alert message
-    SmsMessage message = SmsMessage(address, 'Hello flutter world!');
+    Map<String, dynamic>? currentUser = await emergency.getContactInfo(uid: widget.auth!.currentUser!.uid);
 
-    // Add a listener to check when the message has been sent or not
-    message.onStateChanged.listen((state) {
-      if (state == SmsMessageState.Sent) {
-        _notification.showNotificationToUser(
-            title: "Alert Sent!",
-            body: "Emergency contacts have received your alert"
-        );
-      } else if (state == SmsMessageState.Delivered) {
-        _notification.showNotificationToUser(
-            title: "Alert Sent!",
-            body: "Emergency contacts have received your alert"
-        );
-      }
-      else {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) =>
-          AlertDialog(
-            title: const Text('Error'),
-            content: const Text(
-                'The alert message could not be sent. Please check if you have credit and try again.'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () =>
-                    Navigator.pop(context, 'OK'),
-                child: const Text('OK'),
-              ),
-            ],
-          )
-        );
-      }
-    });
-    sender.sendSms(message);
+    List<String> emergencyContacts = await emergency.getEmergencyContactNumbers();
+
+    Map data = {
+      "sender": currentUser!['name'].split(" ")[0],
+      "message": "This is MySafeCampus Emergency Alert from ${currentUser['name']}. I need help!",
+      "recipients":
+      emergencyContacts
+    };
+
+    var url = Uri.parse("https://sms.arkesel.com/api/v2/sms/send");
+    var response = await http.post(
+        url,
+        headers: {
+          "api-key": SMSAPIKEY,
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode(data)
+    );
+
+    if (jsonDecode(response.body)['status'] == "success"){
+      historyManager.updateEmergencyButtonHits(status: "Sent");
+      _notification.showNotificationToUser(
+          title: "Alert Sent!",
+          body: "Emergency contacts have received your alert"
+      );
+    }
+    else {
+      historyManager.updateEmergencyButtonHits(status: "Failed");
+      showDialog(
+        context: context,
+        builder: (BuildContext context) =>
+        AlertDialog(
+          title: const Text('Error'),
+          content: const Text(
+              'The alert message could not be sent. Please check if you have credit and try again.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () =>
+                  Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        )
+      );
+    }
+
+    return response.body;
   }
 }

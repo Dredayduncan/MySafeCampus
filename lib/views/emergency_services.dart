@@ -43,8 +43,9 @@ class _EmergencyServicesState extends State<EmergencyServices> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: "Emergency Services",
+        auth: widget.auth,
       ),
       floatingActionButton: widget.isEmergencyContact == true
         ? null
@@ -159,6 +160,7 @@ class _EmergencyServicesState extends State<EmergencyServices> {
     emergencyServices = widget.isEmergencyContact == true
         ? await contacts.getChatList(emergencyContactID: widget.auth.currentUser!.uid)
         : await contacts.getEmergencyContacts(isEmergencyContact: widget.isEmergencyContact);
+
     if (emergencyServices.isEmpty){
       setState(() {
         _emergencyServicePage = const Center(

@@ -36,7 +36,7 @@ class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
     super.initState();
     screens = [
       HomeScreen(auth: widget.auth),
-      const Articles(),
+      Articles(auth: widget.auth,),
       Report(auth: widget.auth,),
       EmergencyServices(auth: widget.auth, isEmergencyContact: widget.isEmergencyContact),
       History(auth: widget.auth),

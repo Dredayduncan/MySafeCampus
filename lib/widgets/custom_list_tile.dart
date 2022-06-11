@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:my_safe_campus/model/user_model.dart';
+import 'package:my_safe_campus/services/user_history.dart';
 import 'package:my_safe_campus/views/chat_screen.dart';
 
 import '../constants.dart';
@@ -111,6 +113,11 @@ class CustomListTile extends StatelessWidget {
 
   Future<bool?> _callNumber(String number) async {
     bool? res = await FlutterPhoneDirectCaller.callNumber(number);
+
+    // Update the database with the call attempt
+    UserHistory historyManager = UserHistory(userID: currentUserID!);
+    historyManager.updateUserCalls(calleeName: title, status: res == true ? "Success" : "Failed");
+
     return res;
   }
 }

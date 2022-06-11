@@ -31,6 +31,22 @@ class EmergencyContacts {
     });
   }
 
+  // Get the contact numbers of emergency contacts
+  Future<List<String>> getEmergencyContactNumbers() async {
+    List emergencyContactIDs = await getEmergencyContactIDs();
+
+    List<String> contacts = [];
+
+    for (var contactId in emergencyContactIDs){
+      var emergencyContact = await getContactInfo(uid: contactId);
+      contacts.add(
+        emergencyContact!['contact']
+      );
+    }
+
+    return contacts;
+  }
+
   // Get the user's timeline
   Future<List> getEmergencyContacts({required isEmergencyContact}) async {
     List emergencyContacts = [];
@@ -111,12 +127,13 @@ class EmergencyContacts {
 
       // Retrieve the list of users the emergency contact has conversations with
       List userChats = value.docs;
-      List conversations = userChats[0].data()['conversations'];
 
       // check if there are no conversations
-      if (conversations.isEmpty){
+      if (!userChats[0].data().containsKey("conversations")){
         return [];
       }
+
+      List conversations = userChats[0].data()['conversations'];
 
       List users = [];
 
