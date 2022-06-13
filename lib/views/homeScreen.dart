@@ -24,27 +24,26 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late CustomNotification _notification;
 
-  _HomeScreenState(){
-
+  _HomeScreenState() {
     // Assign a push token to every user to be able to receive push notifications
     FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
     firebaseMessaging.requestPermission();
 
     firebaseMessaging.getToken().then((token) {
-      if (token != null){
-        widget.auth!.updateData(userID: widget.auth!.currentUser!.uid, token: token);
+      if (token != null) {
+        widget.auth!
+            .updateData(userID: widget.auth!.currentUser!.uid, token: token);
       }
     });
 
     _notification = CustomNotification(
-    //     onClick: (payload) async {
-    //   Navigator.push(
-    //       context,
-    //       MaterialPageRoute(
-    //           builder: (context) => HomeScreen(auth: widget.auth)));
-    // }
-    );
-
+        //     onClick: (payload) async {
+        //   Navigator.push(
+        //       context,
+        //       MaterialPageRoute(
+        //           builder: (context) => HomeScreen(auth: widget.auth)));
+        // }
+        );
   }
 
   @override
@@ -76,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   SizedBox(height: 5),
                   Text(
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Arcu auctor mattis neque, sed vel turpis posuere mi tortor. Amet eget sem vel amet. ",
+                    "Welcome to My Safe Campus. This app serves as a channel for reporting sexual misconduct and other sexually inappropriate activities.  ",
                     style: TextStyle(
                       fontFamily: 'Quattrocentro',
                       fontSize: 16,
@@ -136,56 +135,53 @@ class _HomeScreenState extends State<HomeScreen> {
   // Send SMS when the emergency button is clicked
   _sendSMS() async {
     // Instantiate user history object
-    UserHistory historyManager = UserHistory(userID: widget.auth!.currentUser!.uid);
+    UserHistory historyManager =
+        UserHistory(userID: widget.auth!.currentUser!.uid);
 
-    EmergencyContacts emergency = EmergencyContacts(currentUserID: widget.auth!.currentUser!.uid);
+    EmergencyContacts emergency =
+        EmergencyContacts(currentUserID: widget.auth!.currentUser!.uid);
 
-    Map<String, dynamic>? currentUser = await emergency.getContactInfo(uid: widget.auth!.currentUser!.uid);
+    Map<String, dynamic>? currentUser =
+        await emergency.getContactInfo(uid: widget.auth!.currentUser!.uid);
 
-    List<String> emergencyContacts = await emergency.getEmergencyContactNumbers();
+    List<String> emergencyContacts =
+        await emergency.getEmergencyContactNumbers();
 
     Map data = {
       "sender": currentUser!['name'].split(" ")[0],
-      "message": "This is MySafeCampus Emergency Alert from ${currentUser['name']}. I need help!",
-      "recipients":
-      emergencyContacts
+      "message":
+          "This is MySafeCampus Emergency Alert from ${currentUser['name']}. I need help!",
+      "recipients": emergencyContacts
     };
 
     var url = Uri.parse("https://sms.arkesel.com/api/v2/sms/send");
-    var response = await http.post(
-        url,
+    var response = await http.post(url,
         headers: {
           "api-key": SMSAPIKEY,
           "Content-Type": "application/json",
         },
-        body: jsonEncode(data)
-    );
+        body: jsonEncode(data));
 
-    if (jsonDecode(response.body)['status'] == "success"){
+    if (jsonDecode(response.body)['status'] == "success") {
       historyManager.updateEmergencyButtonHits(status: "Sent");
       _notification.showNotificationToUser(
           title: "Alert Sent!",
-          body: "Emergency contacts have received your alert"
-      );
-    }
-    else {
+          body: "Emergency contacts have received your alert");
+    } else {
       historyManager.updateEmergencyButtonHits(status: "Failed");
       showDialog(
-        context: context,
-        builder: (BuildContext context) =>
-        AlertDialog(
-          title: const Text('Error'),
-          content: const Text(
-              'The alert message could not be sent. Please check if you have credit and try again.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () =>
-                  Navigator.pop(context, 'OK'),
-              child: const Text('OK'),
-            ),
-          ],
-        )
-      );
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+                title: const Text('Error'),
+                content: const Text(
+                    'The alert message could not be sent. Please check if you have credit and try again.'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text('OK'),
+                  ),
+                ],
+              ));
     }
 
     return response.body;

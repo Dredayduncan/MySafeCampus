@@ -20,7 +20,7 @@ class _ReportState extends State<Report> {
   final TextEditingController perpetratorInfo = TextEditingController();
   final TextEditingController location = TextEditingController();
   final TextEditingController description = TextEditingController();
-  final TextEditingController _ctrl5 = TextEditingController();
+  final TextEditingController other = TextEditingController();
   final TextEditingController _ctrl6 = TextEditingController();
 
   bool? chkvalue = false;
@@ -33,11 +33,15 @@ class _ReportState extends State<Report> {
     'Harassment',
     'Assault',
     'Rape',
+    'Other',
   ];
+
+  bool isOther = false;
 
   @override
   Widget build(BuildContext context) {
-    UserHistory historyManager = UserHistory(userID: widget.auth.currentUser!.uid);
+    UserHistory historyManager =
+        UserHistory(userID: widget.auth.currentUser!.uid);
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -132,13 +136,44 @@ class _ReportState extends State<Report> {
                                   setState(() {
                                     dropdownvalue = newValue!;
                                   });
+
+                                  if (newValue == 'Other') {
+                                    setState(() {
+                                      isOther = true;
+                                    });
+                                  } else {
+                                    isOther = false;
+                                  }
                                 },
                               ),
                               const SizedBox(
                                 height: 30,
                               ),
-                              const Text(
-                                '4. Where did the issue occur?',
+                              isOther
+                                  ? Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          '4. If other, kindly state what happened.',
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        CustomFormField(
+                                          controller: other,
+                                          hintText: 'hintText',
+                                          onChanged: (value) {},
+                                          validator: (value) {},
+                                        ),
+                                        const SizedBox(
+                                          height: 30,
+                                        ),
+                                      ],
+                                    )
+                                  : const SizedBox(width: 0),
+                              Text(
+                                '${isOther ? '5.' : '4.'} Where did the issue occur?',
                               ),
                               const SizedBox(
                                 height: 5,
@@ -152,8 +187,8 @@ class _ReportState extends State<Report> {
                               const SizedBox(
                                 height: 30,
                               ),
-                              const Text(
-                                '5. Give a brief description of what happened.',
+                              Text(
+                                '${isOther ? '6.' : '5.'} Give a brief description of what happened.',
                               ),
                               const SizedBox(
                                 height: 5,
@@ -182,7 +217,8 @@ class _ReportState extends State<Report> {
                                               actions: <Widget>[
                                                 TextButton(
                                                   onPressed: () {
-                                                    historyManager.updateCancelledReports();
+                                                    historyManager
+                                                        .updateCancelledReports();
                                                     Navigator.pop(
                                                         context, 'Cancel');
                                                   },
@@ -190,19 +226,29 @@ class _ReportState extends State<Report> {
                                                 ),
                                                 TextButton(
                                                   onPressed: () {
-                                                    Map<String, String> formDetails = {
-                                                      "perpetrator": perpetrator.text,
-                                                      "perpetratorInfo": perpetratorInfo.text,
-                                                      "offenceType": dropdownvalue,
+                                                    Map<String, String>
+                                                        formDetails = {
+                                                      "perpetrator":
+                                                          perpetrator.text,
+                                                      "perpetratorInfo":
+                                                          perpetratorInfo.text,
+                                                      "offenceType":
+                                                          dropdownvalue,
                                                       "location": location.text,
-                                                      "description": description.text
+                                                      "description":
+                                                          description.text
                                                     };
 
-                                                    historyManager.updateReports(formDetails: formDetails).then((value) {
-                                                      if (value == true){
+                                                    historyManager
+                                                        .updateReports(
+                                                            formDetails:
+                                                                formDetails)
+                                                        .then((value) {
+                                                      if (value == true) {
                                                         setState(() {
                                                           perpetrator.clear();
-                                                          perpetratorInfo.clear();
+                                                          perpetratorInfo
+                                                              .clear();
                                                           location.clear();
                                                           description.clear();
                                                         });
@@ -213,21 +259,26 @@ class _ReportState extends State<Report> {
 
                                                         // display the feedback pop up
                                                         showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext context) =>
-                                                            AlertDialog(
-                                                              title: const Text('Error'),
-                                                              content: const Text(
-                                                                  'Your report has been sent!'),
-                                                              actions: <Widget>[
-                                                                TextButton(
-                                                                  onPressed: () =>
-                                                                      Navigator.pop(context, 'OK'),
-                                                                  child: const Text('OK'),
-                                                                ),
-                                                              ],
-                                                            )
-                                                        );
+                                                            context: context,
+                                                            builder: (BuildContext
+                                                                    context) =>
+                                                                AlertDialog(
+                                                                  title: const Text(
+                                                                      'Error'),
+                                                                  content:
+                                                                      const Text(
+                                                                          'Your report has been sent!'),
+                                                                  actions: <
+                                                                      Widget>[
+                                                                    TextButton(
+                                                                      onPressed: () => Navigator.pop(
+                                                                          context,
+                                                                          'OK'),
+                                                                      child: const Text(
+                                                                          'OK'),
+                                                                    ),
+                                                                  ],
+                                                                ));
                                                       }
                                                     });
                                                   },
