@@ -160,6 +160,7 @@ class _EmergencyServicesState extends State<EmergencyServices> {
     emergencyServices = widget.isEmergencyContact == true
         ? await contacts.getChatList(emergencyContactID: widget.auth.currentUser!.uid)
         : await contacts.getEmergencyContacts(isEmergencyContact: widget.isEmergencyContact);
+
     if (emergencyServices.isEmpty){
       setState(() {
         _emergencyServicePage = const Center(

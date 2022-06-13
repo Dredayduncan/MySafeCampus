@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import "dart:convert" show json;
 import "package:http/http.dart" as http;
+import 'package:my_safe_campus/constants.dart';
 
 class CustomNotification{
 
@@ -81,8 +82,8 @@ class CustomNotification{
           "to": to,
           "priority": "high",
           "notification": {
-            "title": "title",
-            "body": "body",
+            "title": title,
+            "body": body,
           },
           "content_available": true
         },
@@ -92,7 +93,7 @@ class CustomNotification{
         body: data,
         headers: {
           "Content-Type": _contentType,
-          "Authorization": "key=AAAAvxAX6gE:APA91bEB3Vl2o3cjX9KLRmSqwsP4-m0QdLbKUxyVz5J3PzwKgFY6gJJ27A4P-_W4dIGH-CGRMwRFGE902JKSiKd9wdYWjNKavI81iX3Qh-f6u1iGE2icR1fynTtcwWQZQNUhoI2JbNHg"
+          "Authorization": FCMSERVERKEY
         },
       );
 
