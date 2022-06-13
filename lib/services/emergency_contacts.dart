@@ -100,6 +100,24 @@ class EmergencyContacts {
         .catchError((error) => false);
   }
 
+  // Remove an personal emergency contact
+  Future<dynamic> removeEmergencyContact({name, contact}) async {
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
+
+    return users
+      .doc(currentUserID)
+      .update({
+        "emergencyContacts": FieldValue.arrayRemove([
+          {
+            "name": name,
+            "contact": contact,
+          }
+        ])
+    })
+        .then((value) => true)
+        .catchError((error) => false);
+  }
+
   // Get user's info
   Future<Map<String, dynamic>?> getContactInfo({uid}) async {
     // Get the data from the database

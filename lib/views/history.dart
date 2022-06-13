@@ -190,14 +190,16 @@ class _HistoryState extends State<History> {
                             return ListView.builder(
                                 itemCount: reports.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  return Padding(
+                                  return reports[index]['status'] != "Cancelled"
+                                    ? Padding(
                                       padding: const EdgeInsets.only(top: 12.0),
                                       child: CustomHistoryTile(
                                         title: reports[index]['formDetails']['offenceType'],
                                         icon: Icons.insert_drive_file_sharp,
                                         subtitle: reports[index]["status"],
                                       )
-                                  );
+                                    )
+                                    : const SizedBox.shrink();
                                 }
                             );
                           },

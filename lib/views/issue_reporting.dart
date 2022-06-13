@@ -233,7 +233,9 @@ class _ReportState extends State<Report> {
                                                       "perpetratorInfo":
                                                           perpetratorInfo.text,
                                                       "offenceType":
-                                                          dropdownvalue,
+                                                        dropdownvalue == "Other"
+                                                        ? other.text
+                                                        : dropdownvalue,
                                                       "location": location.text,
                                                       "description":
                                                           description.text
