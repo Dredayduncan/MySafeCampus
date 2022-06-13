@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:my_safe_campus/model/user_model.dart';
+import 'package:my_safe_campus/services/emergency_contacts.dart';
 import 'package:my_safe_campus/services/user_history.dart';
 import 'package:my_safe_campus/views/chat_screen.dart';
 
@@ -87,24 +88,111 @@ class CustomListTile extends StatelessWidget {
                     });
                   },
                 ),
-                personalContact == true ? const SizedBox.shrink() : IconButton(
-                  icon: const Icon(Icons.chat),
-                  iconSize: 20.0,
-                  color: kDefaultBackground,
-                  onPressed: () {
-                    Navigator.of(context, rootNavigator: true)
-                      .push(MaterialPageRoute(
-                        builder: (_) => ChatScreen(
-                          respondentName: title,
-                          senderID: currentUserID!,
-                          messageID: messageID,
-                          respondentID: respondentID!,
-                          pushToken: pushToken!
+                personalContact == true
+                  ? IconButton(
+                    icon: const Icon(Icons.cancel_outlined),
+                    iconSize: 20.0,
+                    color: kDefaultBackground,
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext
+                        context) =>
+                          AlertDialog(
+                            title: const Text(
+                                'Delete Contact'),
+                            content:
+                            const Text(
+                                'Are you sure you want to delete this contact?'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.pop(
+                                    context,
+                                    'Cancel'),
+                                child: const Text(
+                                    'Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  EmergencyContacts emergency = EmergencyContacts(currentUserID: currentUserID!);
+                                  emergency.removeEmergencyContact(name: title, contact: subtitle).then((value) {
+                                    if (value == false){
+                                      Navigator.pop(context, 'Delete');
+                                      return showDialog(
+                                          context: context,
+                                          builder: (BuildContext
+                                          context) =>
+                                              AlertDialog(
+                                                title: const Text(
+                                                    'Error'),
+                                                content:
+                                                const Text(
+                                                    'Contact could not be deleted.'),
+                                                actions: <
+                                                    Widget>[
+                                                  TextButton(
+                                                    onPressed: () => Navigator.pop(
+                                                        context,
+                                                        'OK'),
+                                                    child: const Text(
+                                                        'OK'),
+                                                  ),
+                                                ],
+                                              ));
+                                    }
+                                    else {
+                                      Navigator.pop(context, 'Delete');
+                                      return showDialog(
+                                          context: context,
+                                          builder: (BuildContext
+                                          context) =>
+                                              AlertDialog(
+                                                title: const Text(
+                                                    'Contact Deleted'),
+                                                content:
+                                                const Text(
+                                                    'The contact has been successfully deleted.'),
+                                                actions: <
+                                                    Widget>[
+                                                  TextButton(
+                                                    onPressed: () => Navigator.pop(
+                                                        context,
+                                                        'OK'),
+                                                    child: const Text(
+                                                        'OK'),
+                                                  ),
+                                                ],
+                                              ));
+                                    }
+                                  });
+
+                                },
+                                child: const Text(
+                                    'Delete'),
+                              )
+                            ],
+                          )
+                      );
+                    },
+                  )
+                  : IconButton(
+                    icon: const Icon(Icons.chat),
+                    iconSize: 20.0,
+                    color: kDefaultBackground,
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true)
+                        .push(MaterialPageRoute(
+                          builder: (_) => ChatScreen(
+                            respondentName: title,
+                            senderID: currentUserID!,
+                            messageID: messageID,
+                            respondentID: respondentID!,
+                            pushToken: pushToken!
+                          )
                         )
-                      )
-                    );
-                  },
-                ),
+                      );
+                    },
+                  ),
               ],
             )
           : SizedBox(width: 0),
