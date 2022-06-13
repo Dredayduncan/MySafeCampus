@@ -82,8 +82,8 @@ class CustomNotification{
           "to": to,
           "priority": "high",
           "notification": {
-            "title": "title",
-            "body": "body",
+            "title": title,
+            "body": body,
           },
           "content_available": true
         },
