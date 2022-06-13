@@ -33,8 +33,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   getUserDetails() async {
     // Get the data from the database
-    DocumentSnapshot<Map<String, dynamic>> query =
-    await FirebaseFirestore.instance.collection("users").doc(widget.auth!.currentUser!.uid).get();
+    DocumentSnapshot<Map<String, dynamic>> query = await FirebaseFirestore
+        .instance
+        .collection("users")
+        .doc(widget.auth!.currentUser!.uid)
+        .get();
 
     // Get the user's data
     var data = query.data();
@@ -50,15 +53,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: 'Profile',
-        showNotif: false,
-      ),
-      body: _currentPage
-    );
+        appBar: const CustomAppBar(
+          title: 'Profile',
+          showNotif: false,
+        ),
+        body: _currentPage);
   }
 
-  Widget buildContent(){
+  Widget buildContent() {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,9 +99,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     TextButton(
                       onPressed: () async {
                         widget.auth!.signOut().then((value) =>
-                            Navigator.of(context).pushReplacement(
+                            Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
-                                    builder: (context) => const Login())));
+                                    builder: (context) => const Login()),
+                                (r) => false));
                       },
                       child: const Text('Logout'),
                     )
