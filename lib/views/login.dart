@@ -63,7 +63,7 @@ class _LoginState extends State<Login> {
                   const Padding(
                     padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                     child: Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilisi tempor fringilla.",
+                      "Type your credentials below to log into the app to begin living a safe life on campus.",
                       style: TextStyle(),
                     ),
                   ),
@@ -153,13 +153,18 @@ class _LoginState extends State<Login> {
                                   );
 
                                   // Navigate to home page when the authentication is successful
-                                  bool isEmergencyContact = await auth.isEmergencyContact();
+                                  bool isEmergencyContact =
+                                      await auth.isEmergencyContact();
 
-                                  return Navigator.of(context, rootNavigator: true).pushReplacement(
-                                    MaterialPageRoute(
-                                      builder: (context) => CustomBottomNavigation(auth: auth, isEmergencyContact: isEmergencyContact,)
-                                    )
-                                  );
+                                  return Navigator.of(context,
+                                          rootNavigator: true)
+                                      .pushReplacement(MaterialPageRoute(
+                                          builder: (context) =>
+                                              CustomBottomNavigation(
+                                                auth: auth,
+                                                isEmergencyContact:
+                                                    isEmergencyContact,
+                                              )));
                                 });
                               }
                             },
