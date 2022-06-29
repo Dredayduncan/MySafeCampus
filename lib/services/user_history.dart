@@ -65,7 +65,7 @@ class UserHistory {
     return reports
       .add({
         "userID": FirebaseFirestore.instance.collection('users').doc(userID),
-        "timeCalled": DateTime.now(),
+        "timeReported": DateTime.now(),
         "status": "Pending",
         "formDetails": formDetails
     })
@@ -80,7 +80,7 @@ class UserHistory {
     return reports
         .add({
       "userID": FirebaseFirestore.instance.collection('users').doc(userID),
-      "timeCalled": DateTime.now(),
+      "timeCancelled": DateTime.now(),
       "status": "Cancelled",
       "formDetails": {}
     })

@@ -8,6 +8,18 @@ class ChatManager {
 
   ChatManager({required this.userID});
 
+  // Get user's info
+  Future<String> getUsername() async {
+    // Get the data from the database
+    DocumentSnapshot<Map<String, dynamic>> query =
+    await FirebaseFirestore.instance.collection("users").doc(userID).get();
+
+    // Get the user's data
+    var data = query.data();
+
+    return data!['name']!;
+  }
+
   // Method to handle image uploads to firebase
   uploadFile(File image, String fileName) {
     Reference ref = FirebaseStorage.instance.ref().child(fileName);
@@ -63,6 +75,8 @@ class ChatManager {
     CollectionReference messages = FirebaseFirestore.instance.collection(
         "messages");
 
+    String username = await getUsername();
+
     return messages.doc(messageID).update({
       "chat": FieldValue.arrayUnion([
         {
@@ -76,7 +90,7 @@ class ChatManager {
           CustomNotification customNotification = CustomNotification();
           customNotification.sendNotification(
               to: pushToken,
-              title: "Message from Andrew",
+              title: "Message from $username",
               body: chat
           );
     })
