@@ -40,13 +40,13 @@ class ChatManager {
   /* Start a new conversation with the respondent where the messageID
     is a concatenation of the sender's id and the recipient's id
   */
-  Future<dynamic> startConversation({messageID, recipientID, chat, pushToken, senderName}) async {
+  Future<dynamic> startConversation({messageID, recipientID, chat, pushToken}) async {
     CollectionReference messages = FirebaseFirestore.instance.collection(
         "messages");
 
+    String username = await getUsername();
+
     // Add the user to the list of users that the emergency contact has chat with
-
-
     return messages.doc(messageID).set({
       "sender": FirebaseFirestore.instance.collection('users').doc(userID),
       "recipient": FirebaseFirestore.instance.collection('users').doc(recipientID),
@@ -63,7 +63,7 @@ class ChatManager {
       CustomNotification customNotification = CustomNotification();
       customNotification.sendNotification(
           to: pushToken,
-          title: "Message from Andrew",
+          title: "Message from $username",
           body: chat
       );
     })

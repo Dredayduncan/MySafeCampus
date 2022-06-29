@@ -179,7 +179,7 @@ class _HistoryState extends State<History> {
 
                             // Check if there has been no conversation between them
                             if (snapshot.data?.size == 0) {
-                              return const Center(child: Text("You have not made any calls."));
+                              return const Center(child: Text("You have not made any reports."));
                             }
 
                             // Get the chats between the user and the respondent

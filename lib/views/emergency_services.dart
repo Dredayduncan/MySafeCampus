@@ -33,11 +33,18 @@ class _EmergencyServicesState extends State<EmergencyServices> {
     ),
   );
 
+  Widget _secondTab = const Center(
+    child:  CircularProgressIndicator(
+      color: kDefaultBackground,
+    ),
+  );
+
   @override
   void initState() {
     super.initState();
     contacts = EmergencyContacts(currentUserID: widget.auth.currentUser!.uid);
     generateEmergencyContacts();
+    secondTab();
   }
 
   @override
@@ -64,9 +71,7 @@ class _EmergencyServicesState extends State<EmergencyServices> {
           elevation: 10,
           child: const FaIcon(FontAwesomeIcons.addressBook),
         ),
-      body: widget.isEmergencyContact == true
-        ? _emergencyServicePage
-        : DefaultTabController(
+      body: DefaultTabController(
           length: 2,
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -89,7 +94,7 @@ class _EmergencyServicesState extends State<EmergencyServices> {
                   ),
                   Tab(
                     child: CustomTabLabel(
-                        label: widget.isEmergencyContact == true ? "Users" : "Personal"),
+                        label: widget.isEmergencyContact == true ? "Messages" : "Personal"),
                   ),
                 ],
               ),
@@ -97,55 +102,7 @@ class _EmergencyServicesState extends State<EmergencyServices> {
                 child: TabBarView(
                   children: [
                     _emergencyServicePage,
-                    StreamBuilder<DocumentSnapshot>(
-                      stream: contacts.getUserEmergencyContacts(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<DocumentSnapshot> snapshot) {
-                        //Check if an error occurred
-                        if (snapshot.hasError) {
-                          return const Text("Something went wrong");
-                        }
-
-                        // Check if the connection is still loading
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(
-                              color: kDefaultBackground,
-                            ),
-                          );
-                        }
-
-                        // Check if there has been no conversation between them
-                        if (snapshot.data == null) {
-                          return const Center(child: Text("Say Something."));
-                        }
-
-                        // Get the chats between the user and the respondent
-                        var doc = snapshot.data as DocumentSnapshot;
-
-                        try {
-                          List userContacts = doc['emergencyContacts'];
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: userContacts.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Padding(
-                                padding: const EdgeInsets.only(top: 12.0),
-                                child: CustomListTile(
-                                  currentUserID: widget.auth.currentUser!.uid,
-                                  title: userContacts[index]["name"],
-                                  label: "FR",
-                                  subtitle: userContacts[index]["contact"],
-                                  personalContact: true,
-                                ),
-                              );
-                            },
-                          );
-                        } catch (error) {
-                          return const SizedBox.shrink();
-                        }
-                      },
-                    )
+                    _secondTab
                   ]
                 )
               )
@@ -156,15 +113,15 @@ class _EmergencyServicesState extends State<EmergencyServices> {
   }
 
   generateEmergencyContacts() async {
-    // await contacts.getChatList(emergencyContactID: widget.auth.currentUser!.uid);
-    emergencyServices = widget.isEmergencyContact == true
-        ? await contacts.getChatList(emergencyContactID: widget.auth.currentUser!.uid)
-        : await contacts.getEmergencyContacts(isEmergencyContact: widget.isEmergencyContact);
+    emergencyServices = await contacts.getEmergencyContacts(isEmergencyContact: widget.isEmergencyContact);
 
     if (emergencyServices.isEmpty){
+
       setState(() {
         _emergencyServicePage = const Center(
-          child: Text("You have no conversations"),
+          child: Text(
+              "There are no emergency contacts."
+          ),
         );
       });
     }
@@ -175,6 +132,90 @@ class _EmergencyServicesState extends State<EmergencyServices> {
           itemCount: emergencyServices.length,
           itemBuilder: (BuildContext context, int index) {
             return emergencyServices[index];
+          },
+        );
+      });
+    }
+  }
+
+  // Generate a display for the second tab depending on whether the user is an emergency contact or not
+  secondTab() async {
+   
+    if (widget.isEmergencyContact == true){
+      List emergencyMessages = await contacts.getChatList(emergencyContactID: widget.auth.currentUser!.uid);
+
+      if (emergencyMessages.isEmpty){
+
+        setState(() {
+          _secondTab = const Center(
+            child: Text(
+              "You have no conversations."
+            ),
+          );
+        });
+      }
+      else{
+        setState(() {
+          _secondTab = ListView.builder(
+            shrinkWrap: true,
+            itemCount: emergencyMessages.length,
+            itemBuilder: (BuildContext context, int index) {
+              return emergencyMessages[index];
+            },
+          );
+        });
+      }
+    }
+    else {
+
+      setState(() {
+        _secondTab = StreamBuilder<DocumentSnapshot>(
+          stream: contacts.getUserEmergencyContacts(),
+          builder: (BuildContext context,
+              AsyncSnapshot<DocumentSnapshot> snapshot) {
+            //Check if an error occurred
+            if (snapshot.hasError) {
+              return const Text("Something went wrong");
+            }
+
+            // Check if the connection is still loading
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: kDefaultBackground,
+                ),
+              );
+            }
+
+            // Check if there has been no conversation between them
+            if (snapshot.data == null) {
+              return const Center(child: Text("Say Something."));
+            }
+
+            // Get the chats between the user and the respondent
+            var doc = snapshot.data as DocumentSnapshot;
+
+            try {
+              List userContacts = doc['emergencyContacts'];
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: userContacts.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 12.0),
+                    child: CustomListTile(
+                      currentUserID: widget.auth.currentUser!.uid,
+                      title: userContacts[index]["name"],
+                      label: "FR",
+                      subtitle: userContacts[index]["contact"],
+                      personalContact: true,
+                    ),
+                  );
+                },
+              );
+            } catch (error) {
+              return const SizedBox.shrink();
+            }
           },
         );
       });
