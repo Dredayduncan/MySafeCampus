@@ -50,5 +50,10 @@
       <string>https</string>
       <string>http</string>
     </array>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string></string>
+    <key>UIBackgroundModes</key>
+    <string>location</string>
+
 </dict>
 </plist>

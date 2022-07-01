@@ -1,10 +1,8 @@
 import 'dart:convert';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:my_safe_campus/constants.dart';
 import 'package:my_safe_campus/services/auth.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ic.dart';
 import 'package:my_safe_campus/services/emergency_contacts.dart';
@@ -12,6 +10,7 @@ import 'package:my_safe_campus/services/user_history.dart';
 import '../widgets/custom_appbar.dart';
 import '../widgets/notification.dart';
 import 'package:http/http.dart' as http;
+import 'package:location/location.dart';
 
 class HomeScreen extends StatefulWidget {
   final Auth? auth;
@@ -147,10 +146,16 @@ class _HomeScreenState extends State<HomeScreen> {
     List<String> emergencyContacts =
         await emergency.getEmergencyContactNumbers();
 
+    var location = await _getLocation();
+
+    if (location == false){
+      return;
+    }
+
     Map data = {
       "sender": currentUser!['name'].split(" ")[0],
       "message":
-          "This is MySafeCampus Emergency Alert from ${currentUser['name']}. I need help!",
+      "This is a MySafeCampus Emergency Alert from ${currentUser['name']}. I need help! Find me at https://maps.google.com/?q=${location.latitude},${location.longitude}",
       "recipients": emergencyContacts
     };
 
@@ -170,20 +175,87 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       historyManager.updateEmergencyButtonHits(status: "Failed");
       showDialog(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-                title: const Text('Error'),
-                content: const Text(
-                    'The alert message could not be sent. Please check if you have credit and try again.'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
-                    child: const Text('OK'),
-                  ),
-                ],
-              ));
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Error'),
+          content: const Text(
+              'The alert message could not be sent. Please check if you have credit and try again.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        )
+      );
     }
 
     return response.body;
+  }
+
+  _getLocation() async {
+    Location location = Location();
+
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+
+    _serviceEnabled = await location.serviceEnabled();
+
+    if (!_serviceEnabled){
+      _serviceEnabled = await location.requestService();
+
+      if (!_serviceEnabled){
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: const Text('Error'),
+              content: const Text(
+                'Location service could not be enabled.'
+                    'Please try again and enable location permission.'
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('OK'),
+                ),
+              ],
+            )
+        );
+
+        return false;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+
+    if (_permissionGranted == PermissionStatus.denied){
+      _permissionGranted = await location.requestPermission();
+
+      if (_permissionGranted != PermissionStatus.granted) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) =>
+                AlertDialog(
+                  title: const Text('Error'),
+                  content: const Text(
+                      'Emergency Alert could not be sent because location permissions have not been granted.'
+                          'Please try again and enable location permission.'
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'OK'),
+                      child: const Text('OK'),
+                    ),
+                  ],
+                )
+        );
+
+        return false;
+      }
+    }
+
+    _locationData = await location.getLocation();
+    return _locationData;
   }
 }

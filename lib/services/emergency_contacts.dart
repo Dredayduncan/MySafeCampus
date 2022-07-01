@@ -64,9 +64,7 @@ class EmergencyContacts {
             title: contactInfo!["name"],
             label: "FR",
             subtitle: contactInfo["contact"],
-            messageID: isEmergencyContact == false
-                ? currentUserID + contactInfo["id"]
-                : contactInfo["id"] + currentUserID,
+            messageID: currentUserID + contactInfo["id"],
             respondentID: contactInfo["id"],
             pushToken: contactInfo["pushToken"]),
       ));
