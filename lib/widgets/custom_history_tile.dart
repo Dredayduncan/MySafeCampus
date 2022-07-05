@@ -6,12 +6,18 @@ class CustomHistoryTile extends StatelessWidget {
   final String title;
   final String subtitle;
   final IconData icon;
+  String? reportStatus;
+  String? alertStatus;
+  String? callStatus;
 
-  const CustomHistoryTile({
+  CustomHistoryTile({
     Key? key,
     required this.title,
     required this.subtitle,
-    required this.icon
+    required this.icon,
+    this.reportStatus,
+    this.alertStatus,
+    this.callStatus
   }) : super(key: key);
 
   @override
@@ -41,8 +47,26 @@ class CustomHistoryTile extends StatelessWidget {
       ),
       subtitle: Text(
         subtitle,
-        style: const TextStyle(fontFamily: 'Quattrocentro'),
+        style: TextStyle(
+          fontFamily: 'Quattrocentro',
+          color: reportStatus != null
+            ? reportStatus == "Resolved"
+              ? success
+              : reportStatus == "Pending"
+                ? pending
+                : kAccentColor
+            :  alertStatus != null
+              ? alertStatus == "Sent"
+                ? success
+                : kAccentColor
+              : callStatus != null
+                ? callStatus == "Success"
+                  ? success
+                  : kAccentColor
+                : null
+        ),
       ),
     );
+    print(reportStatus);
   }
 }
