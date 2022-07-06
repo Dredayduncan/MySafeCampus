@@ -6,7 +6,7 @@ import 'package:my_safe_campus/widgets/custom_tab_label.dart';
 import '../services/auth.dart';
 import '../services/user_history.dart';
 import '../widgets/custom_history_tile.dart';
-import '../widgets/custom_list_tile.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class History extends StatefulWidget {
   final Auth auth;
@@ -17,12 +17,6 @@ class History extends StatefulWidget {
 }
 
 class _HistoryState extends State<History> {
-
-  List contacts = [
-    {"label": "FR", "title": "First Respondent Team", "subtitle": "0322043112"},
-    {"label": "FR", "title": "First Respondent Team", "subtitle": "0322043112"},
-    {"label": "FR", "title": "First Respondent Team", "subtitle": "0322043112"},
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +48,7 @@ class _HistoryState extends State<History> {
                       alignment: Alignment.centerLeft,
                       child:  Tab(
                         child: CustomTabLabel(
-                            label: "SMS"),
+                            label: "EMG. Alert"),
                       ),
                     ),
                     Tab(
@@ -108,8 +102,9 @@ class _HistoryState extends State<History> {
                                     padding: const EdgeInsets.only(top: 12.0),
                                     child: CustomHistoryTile(
                                       title: "Button Was Pressed",
+                                      alertStatus: sms[index]["status"],
                                       icon: Icons.sms,
-                                      subtitle: sms[index]["status"],
+                                      subtitle: sms[index]["status"] + " - " + timeago.format(sms[index]["timeSent"].toDate(), locale: 'en_short'),
                                     )
                                 );
                               }
@@ -152,7 +147,8 @@ class _HistoryState extends State<History> {
                                       child: CustomHistoryTile(
                                         title: calls[index]['calleeName'],
                                         icon: Icons.call,
-                                        subtitle: calls[index]["status"],
+                                        callStatus: calls[index]["status"],
+                                        subtitle: calls[index]["status"] + " - " +  timeago.format(calls[index]["timeCalled"].toDate(), locale: 'en_short'),
                                       )
                                   );
                                 }
@@ -196,7 +192,8 @@ class _HistoryState extends State<History> {
                                       child: CustomHistoryTile(
                                         title: reports[index]['formDetails']['offenceType'],
                                         icon: Icons.insert_drive_file_sharp,
-                                        subtitle: reports[index]["status"],
+                                        reportStatus: reports[index]["status"],
+                                        subtitle: reports[index]["status"] + " - " + timeago.format(reports[index]["timeReported"].toDate(), locale: 'en_short'),
                                       )
                                     )
                                     : const SizedBox.shrink();
