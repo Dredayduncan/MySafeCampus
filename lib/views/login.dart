@@ -46,7 +46,7 @@ class _LoginState extends State<Login> {
                     width: double.infinity,
                     height: 350,
                     child: Image(
-                      image: AssetImage("assets/images/Mansplaining-bro.png"),
+                      image: AssetImage("assets/images/two_psychologists.png"),
                     ),
                   ),
                   const SizedBox(height: 10),
