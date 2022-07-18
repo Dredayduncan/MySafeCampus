@@ -48,6 +48,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Allow Kasha to access your location</string>
 	<key>LSApplicationQueriesSchemes</key>
+
 	<array>
 		<string>https</string>
 		<string>http</string>
