@@ -45,17 +45,13 @@
 	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Allow Kasha to access your location</string>
 	<key>LSApplicationQueriesSchemes</key>
-    <array>
-      <string>https</string>
-      <string>http</string>
-    </array>
-    <key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs access to location in the background.</string>    
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app needs access to location when open and in the background.</string>
-    <key>UIBackgroundModes</key>
-    <string>location</string>
 
+	<array>
+		<string>https</string>
+		<string>http</string>
+	</array>
 </dict>
 </plist>
